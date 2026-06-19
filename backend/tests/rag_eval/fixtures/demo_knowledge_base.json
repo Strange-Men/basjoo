@@ -1,0 +1,83 @@
+{
+  "documents": [
+    {
+      "doc_id": "return_policy.md",
+      "source_title": "Return & Refund Policy",
+      "source_url": "https://example.com/return-policy",
+      "source_type": "file",
+      "chunks": [
+        {
+          "chunk_id": "return_policy_0",
+          "text": "Return Policy: You may return any unused product within 7 days of delivery for a full refund. The product must be in its original packaging with all accessories included. To initiate a return, contact our support team with your order number.",
+          "chunk_index": 0
+        },
+        {
+          "chunk_id": "return_policy_1",
+          "text": "Refund Process: Once we receive the returned item and verify its condition, the refund will be processed within 3-5 business days. The refund will be credited to your original payment method. Shipping fees are non-refundable unless the return is due to our error.",
+          "chunk_index": 1
+        },
+        {
+          "chunk_id": "return_policy_2",
+          "text": "Exchange Policy: If you wish to exchange a product for a different size or color, please contact support within 14 days of delivery. The exchanged item must be unused and in original packaging.",
+          "chunk_index": 2
+        }
+      ]
+    },
+    {
+      "doc_id": "product_faq.md",
+      "source_title": "Product FAQ",
+      "source_url": "https://example.com/product-faq",
+      "source_type": "file",
+      "chunks": [
+        {
+          "chunk_id": "product_faq_0",
+          "text": "Warranty: All our electronic products come with a 1-year warranty covering manufacturing defects. The warranty does not cover damage caused by misuse, accidents, or unauthorized modifications. Proof of purchase is required for warranty claims.",
+          "chunk_index": 0
+        },
+        {
+          "chunk_id": "product_faq_1",
+          "text": "Shipping: Standard shipping takes 3-5 business days within the country. Express shipping (1-2 business days) is available for an additional fee. International shipping takes 7-14 business days depending on the destination.",
+          "chunk_index": 1
+        },
+        {
+          "chunk_id": "product_faq_2",
+          "text": "保修政策：所有电子产品享受1年质保，覆盖质量问题导致的故障。因人为损坏、意外或未经授权的修改造成的问题不在保修范围内。申请保修需提供购买凭证。",
+          "chunk_index": 2
+        },
+        {
+          "chunk_id": "product_faq_3",
+          "text": "物流配送：国内标准配送3-5个工作日，加急配送1-2个工作日（额外收费）。国际配送7-14个工作日，视目的地而定。",
+          "chunk_index": 3
+        }
+      ]
+    },
+    {
+      "doc_id": "troubleshooting.md",
+      "source_title": "Troubleshooting Guide",
+      "source_url": "https://example.com/troubleshooting",
+      "source_type": "file",
+      "chunks": [
+        {
+          "chunk_id": "troubleshooting_0",
+          "text": "Device Won't Turn On: If your device won't turn on, try these steps: 1) Connect the charger and wait at least 30 minutes. 2) Press and hold the power button for 10 seconds. 3) Try a different charging cable. 4) If none of these work, contact support for a potential warranty claim.",
+          "chunk_index": 0
+        },
+        {
+          "chunk_id": "troubleshooting_1",
+          "text": "设备无法开机：请尝试以下步骤：1）连接充电器，等待至少30分钟；2）长按电源键10秒；3）更换充电线重试；4）如以上方法均无效，请联系客服申请保修。",
+          "chunk_index": 1
+        },
+        {
+          "chunk_id": "troubleshooting_2",
+          "text": "Factory Reset: To reset your device to factory settings, go to Settings > System > Reset > Factory Reset. Warning: This will erase all data on the device. Make sure to back up important files before proceeding.",
+          "chunk_index": 2
+        },
+        {
+          "chunk_id": "troubleshooting_3",
+          "text": "恢复出厂设置：进入 设置 > 系统 > 重置 > 恢复出厂设置。警告：此操作将清除设备上的所有数据，请提前备份重要文件。",
+          "chunk_index": 3
+        }
+      ]
+    }
+  ]
+}

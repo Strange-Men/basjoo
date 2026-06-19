@@ -1,0 +1,152 @@
+[
+  {
+    "test_id": "TC001",
+    "scenario": "normal_hit",
+    "query": "How do I return a product?",
+    "language": "en",
+    "expected_answer_keywords": ["return", "refund", "7 days", "unused"],
+    "expected_sources": ["return_policy.md"],
+    "expected_confidence": "high",
+    "description": "Normal return policy query — should return return process and conditions"
+  },
+  {
+    "test_id": "TC002",
+    "scenario": "normal_hit",
+    "query": "产品保修多久？",
+    "language": "zh",
+    "expected_answer_keywords": ["保修", "1年", "质量问题"],
+    "expected_sources": ["product_faq.md"],
+    "expected_confidence": "high",
+    "description": "正常保修政策查询，应返回保修期限和条件"
+  },
+  {
+    "test_id": "TC003",
+    "scenario": "normal_hit",
+    "query": "如何重置设备到出厂设置？",
+    "language": "zh",
+    "expected_answer_keywords": ["恢复出厂设置", "设置", "重置"],
+    "expected_sources": ["troubleshooting.md"],
+    "expected_confidence": "high",
+    "description": "正常故障排除查询，应返回重置步骤"
+  },
+  {
+    "test_id": "TC004",
+    "scenario": "multi_doc_retrieval",
+    "query": "What is the warranty and return policy for electronics?",
+    "language": "en",
+    "expected_answer_keywords": ["warranty", "return", "1 year", "7 days"],
+    "expected_sources": ["product_faq.md", "return_policy.md"],
+    "expected_confidence": "high",
+    "description": "Query requiring information from multiple documents"
+  },
+  {
+    "test_id": "TC005",
+    "scenario": "multi_doc_retrieval",
+    "query": "设备出现故障但已经过了保修期，还能退货吗？",
+    "language": "zh",
+    "expected_answer_keywords": ["保修", "退货", "故障"],
+    "expected_sources": ["product_faq.md", "return_policy.md", "troubleshooting.md"],
+    "expected_confidence": "medium",
+    "description": "跨文档综合查询：保修+退货+故障排除"
+  },
+  {
+    "test_id": "TC006",
+    "scenario": "no_answer_fallback",
+    "query": "What is the weather like today?",
+    "language": "en",
+    "expected_answer_keywords": [],
+    "expected_sources": [],
+    "expected_confidence": "none",
+    "description": "Completely unrelated query — should return no_answer or fallback"
+  },
+  {
+    "test_id": "TC007",
+    "scenario": "no_answer_fallback",
+    "query": "你们公司的股票代码是什么？",
+    "language": "zh",
+    "expected_answer_keywords": [],
+    "expected_sources": [],
+    "expected_confidence": "none",
+    "description": "知识库无关问题，应返回无答案或拒答"
+  },
+  {
+    "test_id": "TC008",
+    "scenario": "low_relevance_reject",
+    "query": "Can you recommend a good restaurant nearby?",
+    "language": "en",
+    "expected_answer_keywords": [],
+    "expected_sources": [],
+    "expected_confidence": "low",
+    "description": "Low relevance query — should not fabricate an answer"
+  },
+  {
+    "test_id": "TC009",
+    "scenario": "low_relevance_reject",
+    "query": "你能帮我写一首诗吗？",
+    "language": "zh",
+    "expected_answer_keywords": [],
+    "expected_sources": [],
+    "expected_confidence": "low",
+    "description": "低相关度查询，不应硬编答案"
+  },
+  {
+    "test_id": "TC010",
+    "scenario": "evidence_citation",
+    "query": "What is the return window for purchases?",
+    "language": "en",
+    "expected_answer_keywords": ["7 days", "return"],
+    "expected_sources": ["return_policy.md"],
+    "expected_confidence": "high",
+    "description": "Citation verification — answer must trace back to return_policy.md"
+  },
+  {
+    "test_id": "TC011",
+    "scenario": "evidence_citation",
+    "query": "产品保修包含哪些情况？",
+    "language": "zh",
+    "expected_answer_keywords": ["保修", "质量问题", "正常使用"],
+    "expected_sources": ["product_faq.md"],
+    "expected_confidence": "high",
+    "description": "引用来源校验——答案必须能追溯到 product_faq.md"
+  },
+  {
+    "test_id": "TC012",
+    "scenario": "hallucination_risk",
+    "query": "What is the company's headquarters address?",
+    "language": "en",
+    "expected_answer_keywords": [],
+    "expected_sources": [],
+    "expected_confidence": "none",
+    "description": "Knowledge base has no company address info — risk of hallucination if answered"
+  },
+  {
+    "test_id": "TC013",
+    "scenario": "hallucination_risk",
+    "query": "你们的创始人是谁？哪一年成立的？",
+    "language": "zh",
+    "expected_answer_keywords": [],
+    "expected_sources": [],
+    "expected_confidence": "none",
+    "description": "知识库无公司历史信息——如回答则存在幻觉风险"
+  },
+  {
+    "test_id": "TC014",
+    "scenario": "normal_hit",
+    "query": "设备无法开机怎么办？",
+    "language": "zh",
+    "expected_answer_keywords": ["充电", "电源", "长按", "开机"],
+    "expected_sources": ["troubleshooting.md"],
+    "expected_confidence": "high",
+    "description": "正常故障排除查询——设备无法开机"
+  },
+  {
+    "test_id": "TC015",
+    "scenario": "normal_hit",
+    "query": "How long does shipping take?",
+    "language": "en",
+    "expected_answer_keywords": ["shipping", "delivery", "days"],
+    "expected_sources": ["product_faq.md"],
+    "expected_confidence": "high",
+    "description": "Normal shipping info query"
+  }
+]

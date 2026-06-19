@@ -1,0 +1,317 @@
+{
+  "metadata": {
+    "timestamp": "2026-06-19T13:56:23.105102+00:00",
+    "test_mode": "mock",
+    "total_cases": 15,
+    "passed_cases": 15,
+    "failed_cases": 0
+  },
+  "metrics": {
+    "precision_at_3": 0.5666666666666667,
+    "recall_at_3": 0.9777777777777779,
+    "precision_at_5": 0.5266666666666666,
+    "recall_at_5": 1.0,
+    "mrr": 0.6,
+    "no_answer_accuracy": 1.0,
+    "citation_accuracy": 0.8888888888888888,
+    "hallucination_risk_cases": 0
+  },
+  "test_results": [
+    {
+      "test_id": "TC001",
+      "scenario": "normal_hit",
+      "query": "How do I return a product?",
+      "passed": true,
+      "confidence": "medium",
+      "no_answer": false,
+      "precision_at_3": 0.5,
+      "recall_at_3": 1.0,
+      "precision_at_5": 0.5,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "returned_sources": [
+        "return_policy.md",
+        "product_faq.md"
+      ],
+      "expected_sources": [
+        "return_policy.md"
+      ],
+      "hallucination_markers": [],
+      "fail_reason": ""
+    },
+    {
+      "test_id": "TC002",
+      "scenario": "normal_hit",
+      "query": "产品保修多久？",
+      "passed": true,
+      "confidence": "high",
+      "no_answer": false,
+      "precision_at_3": 1.0,
+      "recall_at_3": 1.0,
+      "precision_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "returned_sources": [
+        "product_faq.md"
+      ],
+      "expected_sources": [
+        "product_faq.md"
+      ],
+      "hallucination_markers": [],
+      "fail_reason": ""
+    },
+    {
+      "test_id": "TC003",
+      "scenario": "normal_hit",
+      "query": "如何重置设备到出厂设置？",
+      "passed": true,
+      "confidence": "high",
+      "no_answer": false,
+      "precision_at_3": 1.0,
+      "recall_at_3": 1.0,
+      "precision_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "returned_sources": [
+        "troubleshooting.md"
+      ],
+      "expected_sources": [
+        "troubleshooting.md"
+      ],
+      "hallucination_markers": [],
+      "fail_reason": ""
+    },
+    {
+      "test_id": "TC004",
+      "scenario": "multi_doc_retrieval",
+      "query": "What is the warranty and return policy for electronics?",
+      "passed": true,
+      "confidence": "medium",
+      "no_answer": false,
+      "precision_at_3": 1.0,
+      "recall_at_3": 1.0,
+      "precision_at_5": 0.8,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "returned_sources": [
+        "return_policy.md",
+        "product_faq.md",
+        "troubleshooting.md"
+      ],
+      "expected_sources": [
+        "return_policy.md",
+        "product_faq.md"
+      ],
+      "hallucination_markers": [],
+      "fail_reason": ""
+    },
+    {
+      "test_id": "TC005",
+      "scenario": "multi_doc_retrieval",
+      "query": "设备出现故障但已经过了保修期，还能退货吗？",
+      "passed": true,
+      "confidence": "none",
+      "no_answer": true,
+      "precision_at_3": 1.0,
+      "recall_at_3": 0.6666666666666666,
+      "precision_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "returned_sources": [],
+      "expected_sources": [
+        "return_policy.md",
+        "product_faq.md",
+        "troubleshooting.md"
+      ],
+      "hallucination_markers": [],
+      "fail_reason": ""
+    },
+    {
+      "test_id": "TC006",
+      "scenario": "no_answer_fallback",
+      "query": "What is the weather like today?",
+      "passed": true,
+      "confidence": "none",
+      "no_answer": true,
+      "precision_at_3": 0.0,
+      "recall_at_3": 1.0,
+      "precision_at_5": 0.0,
+      "recall_at_5": 1.0,
+      "mrr": 0.0,
+      "returned_sources": [],
+      "expected_sources": [],
+      "hallucination_markers": [],
+      "fail_reason": ""
+    },
+    {
+      "test_id": "TC007",
+      "scenario": "no_answer_fallback",
+      "query": "你们公司的股票代码是什么？",
+      "passed": true,
+      "confidence": "none",
+      "no_answer": true,
+      "precision_at_3": 0.0,
+      "recall_at_3": 1.0,
+      "precision_at_5": 0.0,
+      "recall_at_5": 1.0,
+      "mrr": 0.0,
+      "returned_sources": [],
+      "expected_sources": [],
+      "hallucination_markers": [],
+      "fail_reason": ""
+    },
+    {
+      "test_id": "TC008",
+      "scenario": "low_relevance_reject",
+      "query": "Can you recommend a good restaurant nearby?",
+      "passed": true,
+      "confidence": "none",
+      "no_answer": true,
+      "precision_at_3": 0.0,
+      "recall_at_3": 1.0,
+      "precision_at_5": 0.0,
+      "recall_at_5": 1.0,
+      "mrr": 0.0,
+      "returned_sources": [],
+      "expected_sources": [],
+      "hallucination_markers": [],
+      "fail_reason": ""
+    },
+    {
+      "test_id": "TC009",
+      "scenario": "low_relevance_reject",
+      "query": "你能帮我写一首诗吗？",
+      "passed": true,
+      "confidence": "none",
+      "no_answer": true,
+      "precision_at_3": 0.0,
+      "recall_at_3": 1.0,
+      "precision_at_5": 0.0,
+      "recall_at_5": 1.0,
+      "mrr": 0.0,
+      "returned_sources": [],
+      "expected_sources": [],
+      "hallucination_markers": [],
+      "fail_reason": ""
+    },
+    {
+      "test_id": "TC010",
+      "scenario": "evidence_citation",
+      "query": "What is the return window for purchases?",
+      "passed": true,
+      "confidence": "medium",
+      "no_answer": false,
+      "precision_at_3": 1.0,
+      "recall_at_3": 1.0,
+      "precision_at_5": 0.6,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "returned_sources": [
+        "return_policy.md",
+        "product_faq.md"
+      ],
+      "expected_sources": [
+        "return_policy.md"
+      ],
+      "hallucination_markers": [],
+      "fail_reason": ""
+    },
+    {
+      "test_id": "TC011",
+      "scenario": "evidence_citation",
+      "query": "产品保修包含哪些情况？",
+      "passed": true,
+      "confidence": "medium",
+      "no_answer": false,
+      "precision_at_3": 1.0,
+      "recall_at_3": 1.0,
+      "precision_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "returned_sources": [
+        "product_faq.md"
+      ],
+      "expected_sources": [
+        "product_faq.md"
+      ],
+      "hallucination_markers": [],
+      "fail_reason": ""
+    },
+    {
+      "test_id": "TC012",
+      "scenario": "hallucination_risk",
+      "query": "What is the company's headquarters address?",
+      "passed": true,
+      "confidence": "none",
+      "no_answer": true,
+      "precision_at_3": 0.0,
+      "recall_at_3": 1.0,
+      "precision_at_5": 0.0,
+      "recall_at_5": 1.0,
+      "mrr": 0.0,
+      "returned_sources": [],
+      "expected_sources": [],
+      "hallucination_markers": [],
+      "fail_reason": ""
+    },
+    {
+      "test_id": "TC013",
+      "scenario": "hallucination_risk",
+      "query": "你们的创始人是谁？哪一年成立的？",
+      "passed": true,
+      "confidence": "none",
+      "no_answer": true,
+      "precision_at_3": 0.0,
+      "recall_at_3": 1.0,
+      "precision_at_5": 0.0,
+      "recall_at_5": 1.0,
+      "mrr": 0.0,
+      "returned_sources": [],
+      "expected_sources": [],
+      "hallucination_markers": [],
+      "fail_reason": ""
+    },
+    {
+      "test_id": "TC014",
+      "scenario": "normal_hit",
+      "query": "设备无法开机怎么办？",
+      "passed": true,
+      "confidence": "high",
+      "no_answer": false,
+      "precision_at_3": 1.0,
+      "recall_at_3": 1.0,
+      "precision_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "returned_sources": [
+        "troubleshooting.md"
+      ],
+      "expected_sources": [
+        "troubleshooting.md"
+      ],
+      "hallucination_markers": [],
+      "fail_reason": ""
+    },
+    {
+      "test_id": "TC015",
+      "scenario": "normal_hit",
+      "query": "How long does shipping take?",
+      "passed": true,
+      "confidence": "medium",
+      "no_answer": false,
+      "precision_at_3": 1.0,
+      "recall_at_3": 1.0,
+      "precision_at_5": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "returned_sources": [
+        "product_faq.md"
+      ],
+      "expected_sources": [
+        "product_faq.md"
+      ],
+      "hallucination_markers": [],
+      "fail_reason": ""
+    }
+  ]
+}
