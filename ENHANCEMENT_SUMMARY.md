@@ -1,5 +1,7 @@
 # Enhancement Summary
 
+> 中文说明见：[ENHANCEMENT_SUMMARY.zh-CN.md](./ENHANCEMENT_SUMMARY.zh-CN.md)
+
 ## Overview
 
 This document describes the enhancements made to the Basjoo AI customer support platform through secondary development. The work focuses on **RAG quality evaluation**, **demo data provisioning**, and **engineering verifiability** — all achievable without real API keys or external services.

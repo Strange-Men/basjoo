@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "timestamp": "2026-06-20T06:58:39.048758+00:00",
+    "timestamp": "2026-06-20T07:16:05.866896+00:00",
     "test_mode": "mock",
     "total_cases": 15,
     "passed_cases": 15,
@@ -99,8 +99,8 @@
         "troubleshooting.md"
       ],
       "expected_sources": [
-        "return_policy.md",
-        "product_faq.md"
+        "product_faq.md",
+        "return_policy.md"
       ],
       "hallucination_markers": [],
       "fail_reason": ""
@@ -120,8 +120,8 @@
       "returned_sources": [],
       "expected_sources": [
         "troubleshooting.md",
-        "return_policy.md",
-        "product_faq.md"
+        "product_faq.md",
+        "return_policy.md"
       ],
       "hallucination_markers": [],
       "fail_reason": ""

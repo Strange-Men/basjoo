@@ -1,121 +1,144 @@
-# Portfolio Summary
+# 作品集摘要｜Portfolio Summary
 
-## Project Background
+> **面向**：中国 HR / 技术面试官 / 作品集访问者
 
-**CustomerOpsAgent_2** is a secondary development project on the open-source AI customer support platform [Basjoo](https://github.com/haoyiyin/basjoo). The goal is to enhance RAG quality evaluation capabilities and create reproducible engineering artifacts.
+---
 
-### Why Basjoo?
+## 项目定位
 
-- **MIT License** — permissive for secondary development
-- **Modern stack** — Python/FastAPI + Next.js 14 + PostgreSQL + Qdrant
-- **Active maintenance** — recent commits, responsive maintainer
-- **Good architecture** — clean separation of concerns, testable code
-- **RAG-ready** — built-in vector search with Qdrant
+基于开源 AI 客服平台 [Basjoo](https://github.com/haoyiyin/basjoo) 进行二次开发，重点补充 **RAG 质量评估能力**和**可复现的工程验证体系**。
 
-## What I Did
+**不是从 0 写客服机器人**，而是在一个真实开源项目上做工程质量增强。
 
-### Phase 1: RAG Evaluation Harness (v1.0)
+### 为什么选 Basjoo？
 
-**Problem**: No way to evaluate RAG retrieval quality without real API keys and Qdrant.
+| 理由 | 说明 |
+|---|---|
+| MIT License | 最宽松的开源协议，学习和二开完全无限制 |
+| 技术栈主流 | Python/FastAPI + Next.js 14 + PostgreSQL + Qdrant |
+| 项目规模适中 | 7.2MB 代码库，单体架构，二开难度低-中 |
+| 测试覆盖出色 | 35+ 后端测试文件 + Playwright E2E 测试 |
+| RAG 管道完整 | Qdrant 向量搜索 + 文档解析 + chunking + embedding |
 
-**Solution**: Built a mock-friendly evaluation framework that:
-- Uses character-frequency embeddings (no API key)
-- Uses in-memory cosine similarity (no Qdrant)
-- Uses extractive answer generation (no LLM)
-- Produces deterministic, reproducible results
+---
 
-**Result**: 37 pytest tests passed, 15 eval cases all pass.
+## 技术栈
 
-### Phase 2: Demo Data (v1.1)
+| 层级 | 技术 |
+|---|---|
+| 后端 | Python 3.11+ / FastAPI |
+| 前端 | TypeScript / Next.js 14 |
+| 数据层 | PostgreSQL + Qdrant（向量搜索） |
+| 部署 | Docker Compose |
+| 测试 | pytest / Playwright |
+| 评估 | 自研 RAG Evaluation Harness |
 
-**Problem**: No realistic test data for the SmartHome Support scenario.
+---
 
-**Solution**: Created a comprehensive demo dataset:
-- 2 demo agents with system prompts
-- 3 knowledge base documents
-- 15 demo questions with categories
-- 3 conversation scenarios
-- 8 adversarial bad cases
+## 我负责的内容
 
-**Result**: seed_demo_data.py supports 3 modes (validate-only, dry-run, mock).
+### Phase 1：RAG Evaluation Harness（v1.0）
 
-### Phase 3: Documentation and Reports (v1.2)
+**问题**：Basjoo 有完整的 RAG 管道，但没有任何系统化的 RAG 质量评估机制。
 
-**Problem**: Documentation was incomplete, reports were basic.
+**方案**：构建了一套 mock 友好的评估框架：
+- Mock Embedding：基于字符频率的 256 维向量，无需 API Key
+- Mock Retriever：基于内存的余弦相似度搜索，无需 Qdrant
+- Mock Pipeline：从检索结果中提取答案，无需调用 LLM
 
-**Solution**: Polished all documentation:
-- Enhanced evaluation report with executive summary
-- Created portfolio summary (this file)
-- Added enhancement summary
-- Improved usage documentation
+**结果**：37 个 pytest 测试全部通过，15 个 eval cases 全部通过。
 
-**Result**: Professional-grade documentation suitable for portfolio display.
+### Phase 2：SmartHome Demo Data（v1.1）
 
-## Technical Highlights
+**问题**：没有现成的测试数据用于智能家居客服场景。
+
+**方案**：创建了完整的演示数据集：
+- 2 个 Demo Agent + 3 篇知识库文档
+- 15 个 Demo 问题 + 3 个对话场景 + 8 个 Bad Cases
+
+**结果**：`seed_demo_data.py` 支持 3 种模式（validate-only、dry-run、mock）。
+
+### Phase 3：文档与报告（v1.2）
+
+**问题**：文档不完整，报告不够正式。
+
+**方案**：完善所有文档：
+- 增强评估报告，增加执行摘要
+- 创建作品集摘要（本文件）
+- 添加增强概述
+- 改进使用文档
+
+**结果**：专业级文档，适合作品集展示。
+
+---
+
+## 工程亮点
 
 ### 1. Mock RAG Pipeline
 
-**Challenge**: How to test RAG quality without real APIs?
+**挑战**：如何在没有真实 API 的情况下测试 RAG 质量？
 
-**Solution**: Designed a deterministic mock pipeline:
-- **Mock Embedding**: Character-frequency vectors (32-dim) — same input always produces same vector
-- **Mock Retriever**: In-memory cosine similarity — no external dependencies
-- **Mock Pipeline**: Extractive answers — copies relevant sentences from chunks
+**方案**：设计了确定性的 mock pipeline：
+- **Mock Embedding**：字符频率向量（256 维）— 相同输入永远产生相同向量
+- **Mock Retriever**：内存余弦相似度 — 无外部依赖
+- **Mock Pipeline**：提取式答案 — 从 chunks 中复制相关句子
 
-**Learning**: Demonstrates understanding of embedding spaces, similarity search, and RAG architecture.
+**体现的能力**：理解 embedding 空间、相似度搜索、RAG 架构。
 
-### 2. Evaluation Metrics
+### 2. 评估指标体系
 
-**Challenge**: How to measure RAG quality?
+**挑战**：如何衡量 RAG 质量？
 
-**Solution**: Implemented standard IR metrics:
-- **Precision@k**: Fraction of top-k results that are relevant
-- **Recall@k**: Fraction of relevant docs found in top-k
-- **MRR**: Mean Reciprocal Rank of first relevant result
-- **No-Answer Accuracy**: Correct refusal rate for irrelevant queries
-- **Citation Accuracy**: Rate of correct source attribution
-- **Hallucination Risk**: Number of fabricated facts
+**方案**：实现了标准 IR 指标：
+- **Precision@k**：top-k 结果中相关文档的比例
+- **Recall@k**：相关文档中被检索到的比例
+- **MRR**：第一个相关结果的排名倒数的平均值
+- **No-Answer Accuracy**：无关查询的正确拒答率
+- **Citation Accuracy**：引用来源的正确率
+- **Hallucination Risk**：编造事实的数量
 
-**Learning**: Shows understanding of information retrieval evaluation methodology.
+**体现的能力**：信息检索评估方法论。
 
-### 3. Reproducible Testing
+### 3. 可复现测试
 
-**Challenge**: How to ensure tests are deterministic and CI-friendly?
+**挑战**：如何确保测试是确定性的、CI 友好的？
 
-**Solution**: 
-- No API keys required
-- No external services (no Docker, no Qdrant)
-- Deterministic mock components
-- JSON fixtures for test data
+**方案**：
+- 不需要 API Key
+- 不需要外部服务（无 Docker、无 Qdrant）
+- 确定性的 mock 组件
+- JSON fixtures 管理测试数据
 
-**Learning**: Demonstrates engineering discipline and CI/CD awareness.
+**体现的能力**：工程纪律和 CI/CD 意识。
 
-### 4. Demo Data Design
+### 4. Demo Data 设计
 
-**Challenge**: How to create realistic test data?
+**挑战**：如何创建逼真的测试数据？
 
-**Solution**:
-- Modeled real customer support scenarios
-- Included edge cases (no-answer, low-relevance)
-- Added adversarial cases (hallucination traps)
-- Structured for both testing and portfolio display
+**方案**：
+- 模拟真实客服场景
+- 包含边界情况（无答案、低相关性）
+- 添加对抗性用例（幻觉陷阱）
+- 结构化设计，同时服务于测试和作品集展示
 
-**Learning**: Shows understanding of test design and data modeling.
+**体现的能力**：测试设计和数据建模。
 
-## Test Results
+---
 
-### RAG Eval Tests
+## 测试结果
+
+### RAG Eval 测试
 
 ```
 tests/rag_eval/: 37 passed
 ```
 
-### Eval Runner
+### 评估 Runner
 
 ```
-Total cases: 15
-Passed: 15 (100%)
-Failed: 0 (0%)
+总用例数：15
+通过：15（100%）
+失败：0（0%）
 
 Precision@3: 0.567
 Recall@3: 0.978
@@ -128,61 +151,96 @@ Citation Accuracy: 88.9%
 Hallucination Risk Cases: 0
 ```
 
-### Baseline Safety
+### 基线安全检查
 
 ```
-Existing tests: 267 passed, 36 failed, 1 skipped (no change)
-New regression: 0
+原有测试：267 passed, 36 failed, 1 skipped（无变化）
+新增回归：0
 ```
-
-## Interview Talking Points
-
-### "Tell me about this project"
-
-"I enhanced an open-source AI customer support platform called Basjoo. My focus was on RAG quality evaluation — building a framework to test retrieval precision, no-answer handling, citation accuracy, and hallucination risk. The key challenge was making it work without real API keys, so I built a mock pipeline using character-frequency embeddings and in-memory similarity search. This made the tests deterministic and CI-friendly."
-
-### "What was the hardest part?"
-
-"Designing the mock embedding system. I needed something that would produce consistent similarity scores without calling a real embedding API. I settled on character-frequency vectors — they're not semantic, but they're deterministic and fast. The trade-off is that the metrics don't reflect real RAG quality, but they do validate the evaluation framework itself."
-
-### "What would you do differently?"
-
-"For production, I'd integrate real embeddings (Jina or OpenAI) and a real vector store (Qdrant). The mock pipeline is great for development and testing, but real RAG quality depends on semantic understanding. I'd also add latency metrics and multi-turn conversation evaluation."
-
-### "What did you learn?"
-
-"Three things: First, the importance of reproducible testing — mock components let me iterate fast without paying for API calls. Second, RAG evaluation is nuanced — precision/recall are just the basics; you also need to check for hallucinations and citation accuracy. Third, documentation matters — a well-documented project is easier to maintain and showcase."
-
-## Resume Bullets
-
-### Chinese
-
-基于开源 AI 客服系统 Basjoo 进行二次开发，构建 RAG Evaluation Harness 与 SmartHome Demo Data，支持检索精度、无答案回退、证据引用与幻觉风险等评估场景，在无真实 API Key / 无 Qdrant 环境下通过 Mock pipeline 完成可复现评估，并生成 JSON / Markdown 评估报告。
-
-### English
-
-Enhanced an open-source AI customer support platform by adding a mock-friendly RAG evaluation harness, demo dataset, no-answer fallback checks, citation validation, hallucination risk tests, and reproducible JSON/Markdown evaluation reports.
-
-### Detailed (for portfolio)
-
-- Designed and implemented a RAG evaluation framework with 15 test cases covering 6 scenario types
-- Built mock embedding system using character-frequency vectors for deterministic, API-key-free testing
-- Implemented standard IR metrics: Precision@k, Recall@k, MRR, No-Answer Accuracy, Citation Accuracy
-- Created SmartHome demo dataset with 2 agents, 3 knowledge docs, 15 questions, 3 conversations, 8 bad cases
-- Achieved 37 pytest tests passed, 15/15 eval cases passed, no regression to existing tests
-- Generated JSON + Markdown evaluation reports with executive summary and metrics analysis
-
-## Project Links
-
-| Resource | URL |
-|---|---|
-| Management Repository | https://github.com/Strange-Men/CustomerOpsAgent_2 |
-| Code Repository | https://github.com/Strange-Men/basjoo/tree/phase1-rag-eval-harness |
-| Enhancement Summary | [ENHANCEMENT_SUMMARY.md](../../ENHANCEMENT_SUMMARY.md) |
-| RAG Evaluation Docs | [rag-evaluation.md](rag-evaluation.md) |
-| Evaluation Report | [../reports/rag_eval_report.md](../reports/rag_eval_report.md) |
 
 ---
 
-*Version: v1.2-docs-and-report*
-*Last updated: 2026-06-20*
+## 面试讲解话术
+
+### "介绍一下这个项目"
+
+"我在开源 AI 客服平台 Basjoo 上做了二次开发，重点是 RAG 质量评估。我构建了一套评估框架，可以测试检索精度、无答案处理、引用准确性和幻觉风险。关键挑战是如何在没有真实 API Key 的情况下做测试 — 我设计了一套 mock pipeline，使用字符频率向量和内存相似度搜索，让测试变得确定性和 CI 友好。"
+
+### "最难的部分是什么？"
+
+"设计 mock embedding 系统。我需要一个不需要调用真实 embedding API 就能产生一致相似度分数的东西。最终选择了字符频率向量 — 它们不是语义的，但是确定性的、快速的。权衡是指标不反映真实 RAG 质量，但能验证评估框架本身是否正确。"
+
+### "你会怎么做不同？"
+
+"生产环境我会接入真实 embedding（Jina 或 OpenAI）和真实向量库（Qdrant）。Mock pipeline 适合开发和测试，但真实 RAG 质量依赖语义理解。我还会加上延迟指标和多轮对话评估。"
+
+### "你学到了什么？"
+
+"三件事：第一，可复现测试的重要性 — mock 组件让我快速迭代，不用付 API 调用费用。第二，RAG 评估的复杂性 — precision/recall 只是基础，还需要检查幻觉和引用准确性。第三，文档的重要性 — 文档完善的项目更容易维护和展示。"
+
+---
+
+## 简历 Bullet
+
+### 中文版（适合直接放简历）
+
+> 基于开源 AI 客服系统 Basjoo 进行二次开发，构建 RAG Evaluation Harness 与 SmartHome Demo Data，覆盖检索命中、无答案回退、证据引用、幻觉风险等 15 类评估用例，并通过 pytest 与独立 runner 生成 JSON / Markdown 评估报告。设计 Mock Embedding / Retriever / Pipeline 实现无 API Key、无 Qdrant 环境下的可复现评估。
+
+### English Version
+
+> Enhanced an open-source AI customer support platform (Basjoo) by adding a mock-friendly RAG evaluation harness with 15 eval cases covering retrieval precision, no-answer fallback, citation accuracy, and hallucination risk. Built deterministic mock pipeline enabling reproducible evaluation without API keys or external services.
+
+### 详细版（适合作品集）
+
+- 设计并实现 RAG 评估框架，包含 15 个测试用例，覆盖 6 类场景
+- 构建基于字符频率向量的 Mock Embedding 系统，实现确定性、无 API Key 的测试
+- 实现标准 IR 指标：Precision@k、Recall@k、MRR、No-Answer Accuracy、Citation Accuracy
+- 创建 SmartHome 演示数据集：2 个 Agent、3 篇知识文档、15 个问题、3 个对话、8 个 Bad Cases
+- 达成 37 个 pytest 测试全部通过，15/15 eval cases 全部通过，无回归
+- 生成 JSON + Markdown 评估报告，含执行摘要和指标分析
+
+---
+
+## 不夸大的边界说明
+
+### 当前成果的真实价值
+
+- ✅ 提供了一套可复现的 RAG 评估框架
+- ✅ 提供了一套完整的 SmartHome Demo 数据
+- ✅ 验证了评估逻辑的正确性（测试通过、指标计算正确）
+- ✅ 没有对原有项目产生回归
+- ✅ 所有工作可以在无 API Key 环境下复现
+
+### 当前成果的局限
+
+- ❌ Mock 指标不代表真实线上 RAG 效果
+- ❌ 字符频率向量不是语义向量
+- ❌ 提取式回答不是 LLM 生成的回答
+- ❌ 评估用例是手动设计的，不是自动生成的
+- ❌ 没有多轮对话评估
+- ❌ 没有延迟/性能指标
+
+### 真实评估需要什么？
+
+- Jina / OpenAI Embedding API（替换 Mock Embedding）
+- Qdrant 向量库（替换 Mock Retriever）
+- LLM API（替换 Mock Pipeline）
+- 框架已预留扩展接口，只需替换实现即可
+
+---
+
+## 项目链接
+
+| 资源 | 链接 |
+|---|---|
+| 管理仓库 | https://github.com/Strange-Men/CustomerOpsAgent_2 |
+| 代码仓库 | https://github.com/Strange-Men/basjoo/tree/phase1-rag-eval-harness |
+| 增强概述（中文） | [ENHANCEMENT_SUMMARY.zh-CN.md](../../ENHANCEMENT_SUMMARY.zh-CN.md) |
+| 增强概述（英文） | [ENHANCEMENT_SUMMARY.md](../../ENHANCEMENT_SUMMARY.md) |
+| RAG 评估文档 | [rag-evaluation.md](rag-evaluation.md) |
+| 评估报告 | [../reports/rag_eval_report.md](../reports/rag_eval_report.md) |
+
+---
+
+*版本：v1.3-phase1-complete*
+*最后更新：2026-06-20*
