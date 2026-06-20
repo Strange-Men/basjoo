@@ -1,0 +1,77 @@
+{
+  "DQ001": {
+    "expected_sources": ["return_policy.md"],
+    "key_facts": ["7 days", "unused", "original packaging", "full refund"],
+    "source_sections": ["Standard Return Policy"]
+  },
+  "DQ002": {
+    "expected_sources": ["product_faq.md"],
+    "key_facts": ["1年", "质量问题", "制造缺陷"],
+    "source_sections": ["Warranty Policy"]
+  },
+  "DQ003": {
+    "expected_sources": ["product_faq.md"],
+    "key_facts": ["3-5 business days", "express 1-2", "free over $50"],
+    "source_sections": ["Shipping & Delivery"]
+  },
+  "DQ004": {
+    "expected_sources": ["troubleshooting.md"],
+    "key_facts": ["充电30分钟", "长按电源键10秒", "更换充电线"],
+    "source_sections": ["Device Won't Turn On"]
+  },
+  "DQ005": {
+    "expected_sources": ["return_policy.md"],
+    "key_facts": ["14 days", "unused", "original packaging", "price difference"],
+    "source_sections": ["Exchange Policy"]
+  },
+  "DQ006": {
+    "expected_sources": ["troubleshooting.md"],
+    "key_facts": ["2.4GHz", "Bluetooth", "pairing mode", "forget network"],
+    "source_sections": ["Wi-Fi Connection Issues"]
+  },
+  "DQ007": {
+    "expected_sources": ["return_policy.md"],
+    "key_facts": ["7天", "退款", "3-5个工作日"],
+    "source_sections": ["Standard Return Policy", "Refund Policy"]
+  },
+  "DQ008": {
+    "expected_sources": [],
+    "key_facts": [],
+    "source_sections": []
+  },
+  "DQ009": {
+    "expected_sources": [],
+    "key_facts": [],
+    "source_sections": []
+  },
+  "DQ010": {
+    "expected_sources": [],
+    "key_facts": [],
+    "source_sections": []
+  },
+  "DQ011": {
+    "expected_sources": ["troubleshooting.md"],
+    "key_facts": ["Settings", "System", "Reset", "Factory Reset", "erase all data"],
+    "source_sections": ["Factory Reset"]
+  },
+  "DQ012": {
+    "expected_sources": ["product_faq.md"],
+    "key_facts": ["国际配送", "7-14工作日", "关税"],
+    "source_sections": ["International Shipping"]
+  },
+  "DQ013": {
+    "expected_sources": ["troubleshooting.md"],
+    "key_facts": ["clean lens", "lighting", "1080p", "night vision"],
+    "source_sections": ["Camera Image Quality Issues"]
+  },
+  "DQ014": {
+    "expected_sources": [],
+    "key_facts": [],
+    "source_sections": []
+  },
+  "DQ015": {
+    "expected_sources": ["product_faq.md", "return_policy.md"],
+    "key_facts": ["1年保修", "7天退货", "质量问题"],
+    "source_sections": ["Warranty Policy", "Standard Return Policy"]
+  }
+}

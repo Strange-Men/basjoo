@@ -1,0 +1,253 @@
+{
+  "documents": [
+    {
+      "doc_id": "product_faq.md",
+      "source_title": "SmartHome Product FAQ",
+      "source_url": "https://example.com/product_faq",
+      "source_type": "file",
+      "chunks": [
+        {
+          "chunk_id": "product_faq_0",
+          "text": "## Warranty Policy",
+          "chunk_index": 0
+        },
+        {
+          "chunk_id": "product_faq_1",
+          "text": "All SmartHome electronic products come with a **1-year limited warranty** covering manufacturing defects and hardware failures under normal use. The warranty does not cover damage caused by misuse, accidents, liquid exposure, power surges, or unauthorized modifications.",
+          "chunk_index": 1
+        },
+        {
+          "chunk_id": "product_faq_2",
+          "text": "To file a warranty claim, you need:\n- Proof of purchase (receipt or order confirmation)\n- Product serial number\n- Description of the issue\nWarranty claims are typically processed within 5-7 business days.\n### Extended Warranty",
+          "chunk_index": 2
+        },
+        {
+          "chunk_id": "product_faq_3",
+          "text": "Customers can purchase an extended warranty within 30 days of the original purchase. The extended warranty adds an additional 1 or 2 years of coverage, matching the original warranty terms.",
+          "chunk_index": 3
+        },
+        {
+          "chunk_id": "product_faq_4",
+          "text": "## Shipping & Delivery\n### Domestic Shipping",
+          "chunk_index": 4
+        },
+        {
+          "chunk_id": "product_faq_5",
+          "text": "- **Standard Shipping**: 3-5 business days (free for orders over $50)\n- **Express Shipping**: 1-2 business days ($9.99 flat rate)\n- **Same-Day Delivery**: Available in select metro areas for orders placed before 12:00 PM ($14.99)\n### International Shipping",
+          "chunk_index": 5
+        },
+        {
+          "chunk_id": "product_faq_6",
+          "text": "- International shipping takes 7-14 business days depending on the destination country\n- Customs duties and import taxes are the responsibility of the customer\n- Tracking numbers are provided for all international shipments\n### Order Tracking",
+          "chunk_index": 6
+        },
+        {
+          "chunk_id": "product_faq_7",
+          "text": "Once your order ships, you will receive an email with a tracking number. You can also track your order by logging into your SmartHome account and visiting the \"My Orders\" section.",
+          "chunk_index": 7
+        },
+        {
+          "chunk_id": "product_faq_8",
+          "text": "## Product Registration",
+          "chunk_index": 8
+        },
+        {
+          "chunk_id": "product_faq_9",
+          "text": "We recommend registering your product within 30 days of purchase. Product registration:\n- Simplifies warranty claims\n- Enables firmware update notifications\n- Provides access to priority customer support\nRegister at: https://example.com/register",
+          "chunk_index": 9
+        },
+        {
+          "chunk_id": "product_faq_10",
+          "text": "## SmartHome Hub Compatibility",
+          "chunk_index": 10
+        },
+        {
+          "chunk_id": "product_faq_11",
+          "text": "All SmartHome devices are compatible with the SmartHome Hub (Model SH-Hub-3). Third-party hubs may work but are not officially supported. For the best experience, we recommend using the SmartHome app (available on iOS and Android).",
+          "chunk_index": 11
+        },
+        {
+          "chunk_id": "product_faq_12",
+          "text": "## Battery & Charging",
+          "chunk_index": 12
+        },
+        {
+          "chunk_id": "product_faq_13",
+          "text": "SmartHome portable devices use rechargeable lithium-ion batteries. Battery life varies by product:\n- SmartHome Sensor: up to 12 months on a single charge\n- SmartHome Camera: up to 6 months (with motion detection enabled)\n- SmartHome Lock: up to 8 months\nCharging is via USB-C. A full charge takes approximately 2-3 hours.",
+          "chunk_index": 13
+        }
+      ]
+    },
+    {
+      "doc_id": "return_policy.md",
+      "source_title": "SmartHome Return & Refund Policy",
+      "source_url": "https://example.com/return_policy",
+      "source_type": "file",
+      "chunks": [
+        {
+          "chunk_id": "return_policy_0",
+          "text": "## Standard Return Policy",
+          "chunk_index": 0
+        },
+        {
+          "chunk_id": "return_policy_1",
+          "text": "You may return any unused SmartHome product within **7 days of delivery** for a full refund. The product must be:\n- In its original packaging with all accessories included\n- In unused, resalable condition\n- Accompanied by the original receipt or order confirmation\n### How to Initiate a Return",
+          "chunk_index": 1
+        },
+        {
+          "chunk_id": "return_policy_2",
+          "text": "1. Contact our support team at support@smarthome-example.com or call 1-800-SMART-HOME\n2. Provide your order number and reason for return\n3. Receive a Return Merchandise Authorization (RMA) number\n4. Ship the product back using the prepaid shipping label provided\n5. Refund is processed within 3-5 business days after we receive and inspect the item\n### Non-Returnable Items",
+          "chunk_index": 2
+        },
+        {
+          "chunk_id": "return_policy_3",
+          "text": "The following items cannot be returned:\n- Products with broken security seals\n- Custom-configured devices\n- Gift cards\n- Products damaged by the customer",
+          "chunk_index": 3
+        },
+        {
+          "chunk_id": "return_policy_4",
+          "text": "## Refund Policy",
+          "chunk_index": 4
+        },
+        {
+          "chunk_id": "return_policy_5",
+          "text": "- Refunds are credited to the original payment method\n- Processing time: 3-5 business days after item inspection\n- Original shipping fees are non-refundable unless the return is due to our error\n- Express shipping fees are non-refundable",
+          "chunk_index": 5
+        },
+        {
+          "chunk_id": "return_policy_6",
+          "text": "## Exchange Policy",
+          "chunk_index": 6
+        },
+        {
+          "chunk_id": "return_policy_7",
+          "text": "If you wish to exchange a product for a different model or color:\n- Contact support within **14 days** of delivery\n- The exchanged item must be unused and in original packaging\n- Price differences will be charged or refunded accordingly\n- Exchanges are subject to product availability",
+          "chunk_index": 7
+        },
+        {
+          "chunk_id": "return_policy_8",
+          "text": "## Defective Product Return",
+          "chunk_index": 8
+        },
+        {
+          "chunk_id": "return_policy_9",
+          "text": "If your product arrives defective or develops a defect within 30 days:\n- We offer free return shipping\n- Full refund or replacement at your choice\n- Contact support immediately with photos or video of the defect",
+          "chunk_index": 9
+        },
+        {
+          "chunk_id": "return_policy_10",
+          "text": "## Late or Missing Refunds",
+          "chunk_index": 10
+        },
+        {
+          "chunk_id": "return_policy_11",
+          "text": "If you haven't received your refund after 5 business days:\n1. Check your bank account again\n2. Contact your credit card company (processing may take additional time)\n3. Contact your bank\n4. If you've done all of the above and still haven't received your refund, contact our support team",
+          "chunk_index": 11
+        },
+        {
+          "chunk_id": "return_policy_12",
+          "text": "## International Returns",
+          "chunk_index": 12
+        },
+        {
+          "chunk_id": "return_policy_13",
+          "text": "International customers are responsible for return shipping costs unless the return is due to our error. We recommend using a trackable shipping method. Customs duties paid on the original order are non-refundable by SmartHome (contact your local customs authority for potential refunds).",
+          "chunk_index": 13
+        }
+      ]
+    },
+    {
+      "doc_id": "troubleshooting.md",
+      "source_title": "SmartHome Troubleshooting Guide",
+      "source_url": "https://example.com/troubleshooting",
+      "source_type": "file",
+      "chunks": [
+        {
+          "chunk_id": "troubleshooting_0",
+          "text": "## Device Won't Turn On",
+          "chunk_index": 0
+        },
+        {
+          "chunk_id": "troubleshooting_1",
+          "text": "If your SmartHome device won't turn on, try these steps:\n1. **Charge the device**: Connect the charger and wait at least 30 minutes. The battery may be completely drained.\n2. **Force restart**: Press and hold the power button for 10 seconds.\n3. **Try a different charging cable**: The cable may be damaged. Use an original SmartHome USB-C cable.\n4. **Check the power source**: Try a different outlet or USB port.\n5. If none of these work, the device may need a warranty repair. Contact support with your product serial number.",
+          "chunk_index": 1
+        },
+        {
+          "chunk_id": "troubleshooting_2",
+          "text": "## Factory Reset",
+          "chunk_index": 2
+        },
+        {
+          "chunk_id": "troubleshooting_3",
+          "text": "To reset your SmartHome device to factory settings:\n1. Go to **Settings > System > Reset > Factory Reset**\n2. Confirm the reset when prompted\n3. The device will restart and return to its initial setup state",
+          "chunk_index": 3
+        },
+        {
+          "chunk_id": "troubleshooting_4",
+          "text": "**Warning**: This will erase all data on the device, including saved Wi-Fi networks, paired devices, and user preferences. Make sure to back up important files before proceeding.",
+          "chunk_index": 4
+        },
+        {
+          "chunk_id": "troubleshooting_5",
+          "text": "### When to Factory Reset\n- Device is unresponsive or freezing frequently\n- You're selling or giving away the device\n- Persistent connectivity issues that other steps haven't resolved",
+          "chunk_index": 5
+        },
+        {
+          "chunk_id": "troubleshooting_6",
+          "text": "## Wi-Fi Connection Issues",
+          "chunk_index": 6
+        },
+        {
+          "chunk_id": "troubleshooting_7",
+          "text": "If your SmartHome device cannot connect to Wi-Fi:\n1. **Check your router**: Ensure your Wi-Fi network is working (test with another device)\n2. **Move closer**: Bring the device within 10 feet of the router during setup\n3. **Check frequency**: SmartHome devices support 2.4GHz networks. 5GHz-only networks are not supported.\n4. **Restart the device**: Power cycle the SmartHome device\n5. **Forget and reconnect**: Go to Settings > Wi-Fi > Forget Network, then reconnect\n6. **Restart the router**: Unplug your router for 30 seconds, then plug it back in",
+          "chunk_index": 7
+        },
+        {
+          "chunk_id": "troubleshooting_8",
+          "text": "## Firmware Update Issues",
+          "chunk_index": 8
+        },
+        {
+          "chunk_id": "troubleshooting_9",
+          "text": "If a firmware update fails:\n1. Ensure the device has at least 50% battery\n2. Connect to a stable Wi-Fi network\n3. Do not turn off the device during the update\n4. If the update stalls for more than 30 minutes, perform a force restart (hold power button for 10 seconds)\n5. Retry the update from Settings > System > Firmware Update",
+          "chunk_index": 9
+        },
+        {
+          "chunk_id": "troubleshooting_10",
+          "text": "## SmartHome App Not Detecting Device",
+          "chunk_index": 10
+        },
+        {
+          "chunk_id": "troubleshooting_11",
+          "text": "If the SmartHome app cannot find your device:\n1. Ensure Bluetooth is enabled on your phone\n2. Ensure the device is in pairing mode (LED blinking blue)\n3. Close and reopen the SmartHome app\n4. Clear the app cache (Settings > Apps > SmartHome > Clear Cache)\n5. Ensure you're using the latest version of the SmartHome app",
+          "chunk_index": 11
+        },
+        {
+          "chunk_id": "troubleshooting_12",
+          "text": "## Camera Image Quality Issues",
+          "chunk_index": 12
+        },
+        {
+          "chunk_id": "troubleshooting_13",
+          "text": "If your SmartHome Camera image is blurry or dark:\n1. **Clean the lens**: Wipe with a soft, dry cloth\n2. **Check lighting**: Ensure adequate lighting or enable night vision mode\n3. **Adjust resolution**: Go to Camera Settings > Image Quality > Select 1080p\n4. **Check internet speed**: Slow upload speeds can reduce image quality\n5. **Restart the camera**: Power cycle by unplugging for 10 seconds",
+          "chunk_index": 13
+        },
+        {
+          "chunk_id": "troubleshooting_14",
+          "text": "## Lock Battery Replacement",
+          "chunk_index": 14
+        },
+        {
+          "chunk_id": "troubleshooting_15",
+          "text": "When the SmartHome Lock battery is low (below 20%), you'll receive a notification. To replace:\n1. Slide the battery cover off the interior panel\n2. Remove the old batteries (4x AA)\n3. Insert 4 new AA batteries (alkaline recommended)\n4. Replace the cover\n5. The lock will automatically recalibrate",
+          "chunk_index": 15
+        },
+        {
+          "chunk_id": "troubleshooting_16",
+          "text": "**Emergency access**: If the lock battery dies completely, use the physical key backup or connect a USB-C power bank to the emergency power port on the bottom of the lock.",
+          "chunk_index": 16
+        }
+      ]
+    }
+  ]
+}

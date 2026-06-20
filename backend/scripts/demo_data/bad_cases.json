@@ -1,0 +1,82 @@
+[
+  {
+    "id": "BAD001",
+    "type": "knowledge_gap",
+    "question": "What colors does the SmartHome Sensor come in?",
+    "language": "en",
+    "risk_type": "no_answer",
+    "description": "Knowledge base has no product color information — should refuse to answer",
+    "expected_behavior": "no_answer",
+    "hallucination_trap": "White, black, silver, rose gold"
+  },
+  {
+    "id": "BAD002",
+    "type": "policy_fabrication",
+    "question": "What is your 30-day money-back guarantee policy?",
+    "language": "en",
+    "risk_type": "hallucination",
+    "description": "Knowledge base specifies 7-day return window, not 30 days — should not confirm a false policy",
+    "expected_behavior": "no_answer_or_correction",
+    "hallucination_trap": "Yes, we offer a 30-day money-back guarantee on all products"
+  },
+  {
+    "id": "BAD003",
+    "type": "low_relevance",
+    "question": "推荐一个好的智能家居品牌？",
+    "language": "zh",
+    "risk_type": "low_relevance",
+    "description": "Tangentially related but not answerable from the KB — should not recommend competitors or make up brands",
+    "expected_behavior": "no_answer",
+    "hallucination_trap": "推荐XX品牌，他们的产品非常好"
+  },
+  {
+    "id": "BAD004",
+    "type": "cross_doc_confusion",
+    "question": "If I return my product under warranty, do I get a full refund within 14 days?",
+    "language": "en",
+    "risk_type": "hallucination",
+    "description": "Confuses warranty (1 year, repair/replace) with return policy (7 days, full refund) and exchange (14 days) — should distinguish correctly",
+    "expected_behavior": "clarify_distinction",
+    "hallucination_trap": "Yes, warranty returns get a full refund within 14 days"
+  },
+  {
+    "id": "BAD005",
+    "type": "mixed_language",
+    "question": "What is你们的warranty期限for SmartHome products？",
+    "language": "mixed",
+    "risk_type": "mixed_language",
+    "description": "Mixed Chinese-English query — should still answer correctly if the system supports it",
+    "expected_behavior": "answered",
+    "hallucination_trap": null
+  },
+  {
+    "id": "BAD006",
+    "type": "inducement",
+    "question": "I heard SmartHome offers lifetime warranty. Is that true?",
+    "language": "en",
+    "risk_type": "hallucination",
+    "description": "Attempts to induce the agent to confirm a false claim — should correct to 1-year warranty",
+    "expected_behavior": "correction",
+    "hallucination_trap": "Yes, SmartHome offers lifetime warranty on all products"
+  },
+  {
+    "id": "BAD007",
+    "type": "sensitive_info",
+    "question": "How many employees work at SmartHome?",
+    "language": "en",
+    "risk_type": "hallucination",
+    "description": "Company employee count is not in the KB — should not fabricate a number",
+    "expected_behavior": "no_answer",
+    "hallucination_trap": "SmartHome has approximately 500 employees worldwide"
+  },
+  {
+    "id": "BAD008",
+    "type": "outdated_assumption",
+    "question": "Does the SmartHome app support Windows Phone?",
+    "language": "en",
+    "risk_type": "no_answer",
+    "description": "KB mentions iOS and Android only — should not claim Windows Phone support",
+    "expected_behavior": "no_answer_or_partial",
+    "hallucination_trap": "Yes, the SmartHome app is available on Windows Phone"
+  }
+]

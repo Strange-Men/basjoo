@@ -1,0 +1,83 @@
+[
+  {
+    "conversation_id": "CONV001",
+    "agent_id": "demo-smarthome-support",
+    "description": "Normal post-sale inquiry: product question followed by shipping question",
+    "turns": [
+      {
+        "role": "user",
+        "content": "Hi, I just bought a SmartHome Camera. How long does the battery last?"
+      },
+      {
+        "role": "assistant",
+        "content": "The SmartHome Camera has a battery life of up to 6 months with motion detection enabled. It charges via USB-C and takes approximately 2-3 hours for a full charge.",
+        "sources": ["product_faq.md"]
+      },
+      {
+        "role": "user",
+        "content": "Great! How long will it take to ship to me?"
+      },
+      {
+        "role": "assistant",
+        "content": "Standard domestic shipping takes 3-5 business days and is free for orders over $50. If you need it faster, express shipping (1-2 business days) is available for $9.99.",
+        "sources": ["product_faq.md"]
+      }
+    ],
+    "expected_outcome": "answered",
+    "should_escalate": false
+  },
+  {
+    "conversation_id": "CONV002",
+    "agent_id": "demo-smarthome-support",
+    "description": "Troubleshooting escalation: device issue persists, escalate to human",
+    "turns": [
+      {
+        "role": "user",
+        "content": "My SmartHome Lock won't turn on. I tried charging it but nothing happens."
+      },
+      {
+        "role": "assistant",
+        "content": "I'm sorry to hear that. Please try these steps: 1) Connect the charger and wait at least 30 minutes. 2) Press and hold the power button for 10 seconds to force restart. 3) Try a different USB-C charging cable.",
+        "sources": ["troubleshooting.md"]
+      },
+      {
+        "role": "user",
+        "content": "I tried all of that and it still doesn't work."
+      },
+      {
+        "role": "assistant",
+        "content": "I understand this is frustrating. Since the basic troubleshooting steps haven't resolved the issue, this may require a warranty repair. Let me connect you with a specialist who can help arrange a repair or replacement under your warranty.",
+        "sources": ["troubleshooting.md", "product_faq.md"]
+      }
+    ],
+    "expected_outcome": "escalated",
+    "should_escalate": true
+  },
+  {
+    "conversation_id": "CONV003",
+    "agent_id": "demo-return-warranty",
+    "description": "No-answer scenario: customer asks about something not in knowledge base",
+    "turns": [
+      {
+        "role": "user",
+        "content": "What color options are available for the SmartHome Sensor?"
+      },
+      {
+        "role": "assistant",
+        "content": "I don't have specific product color information in my knowledge base. Would you like me to connect you with a product specialist who can help with this?",
+        "sources": []
+      },
+      {
+        "role": "user",
+        "content": "Yes please, and also can you tell me about your company's founding story?"
+      },
+      {
+        "role": "assistant",
+        "content": "I don't have information about our company's founding story. I can connect you with a human agent who may be able to help with both questions. Would you like me to do that?",
+        "sources": []
+      }
+    ],
+    "expected_outcome": "no_answer_escalated",
+    "should_escalate": true
+  }
+]

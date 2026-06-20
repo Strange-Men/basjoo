@@ -1,0 +1,152 @@
+[
+  {
+    "id": "DQ001",
+    "question": "How do I return a product?",
+    "language": "en",
+    "category": "return_policy",
+    "expected_answer_keywords": ["return", "refund", "7 days", "unused", "original packaging"],
+    "expected_sources": ["return_policy.md"],
+    "should_answer": true,
+    "risk_type": null
+  },
+  {
+    "id": "DQ002",
+    "question": "产品保修多久？",
+    "language": "zh",
+    "category": "warranty",
+    "expected_answer_keywords": ["保修", "1年", "质量问题"],
+    "expected_sources": ["product_faq.md"],
+    "should_answer": true,
+    "risk_type": null
+  },
+  {
+    "id": "DQ003",
+    "question": "How long does shipping take for domestic orders?",
+    "language": "en",
+    "category": "shipping",
+    "expected_answer_keywords": ["3-5 business days", "standard", "express", "1-2"],
+    "expected_sources": ["product_faq.md"],
+    "should_answer": true,
+    "risk_type": null
+  },
+  {
+    "id": "DQ004",
+    "question": "设备无法开机怎么办？",
+    "language": "zh",
+    "category": "troubleshooting",
+    "expected_answer_keywords": ["充电", "电源", "长按", "开机"],
+    "expected_sources": ["troubleshooting.md"],
+    "should_answer": true,
+    "risk_type": null
+  },
+  {
+    "id": "DQ005",
+    "question": "What is the exchange policy?",
+    "language": "en",
+    "category": "return_policy",
+    "expected_answer_keywords": ["exchange", "14 days", "unused", "original packaging"],
+    "expected_sources": ["return_policy.md"],
+    "should_answer": true,
+    "risk_type": null
+  },
+  {
+    "id": "DQ006",
+    "question": "How do I connect my device to Wi-Fi?",
+    "language": "en",
+    "category": "troubleshooting",
+    "expected_answer_keywords": ["Wi-Fi", "2.4GHz", "connect", "router"],
+    "expected_sources": ["troubleshooting.md"],
+    "should_answer": true,
+    "risk_type": null
+  },
+  {
+    "id": "DQ007",
+    "question": "你们的退货政策是什么？退款要多久？",
+    "language": "zh",
+    "category": "return_policy",
+    "expected_answer_keywords": ["退货", "7天", "退款", "3-5"],
+    "expected_sources": ["return_policy.md"],
+    "should_answer": true,
+    "risk_type": null
+  },
+  {
+    "id": "DQ008",
+    "question": "What is the weather like today?",
+    "language": "en",
+    "category": "unrelated",
+    "expected_answer_keywords": [],
+    "expected_sources": [],
+    "should_answer": false,
+    "risk_type": "no_answer"
+  },
+  {
+    "id": "DQ009",
+    "question": "你们公司的CEO是谁？",
+    "language": "zh",
+    "category": "unrelated",
+    "expected_answer_keywords": [],
+    "expected_sources": [],
+    "should_answer": false,
+    "risk_type": "hallucination"
+  },
+  {
+    "id": "DQ010",
+    "question": "Can you write me a poem about smart homes?",
+    "language": "en",
+    "category": "unrelated",
+    "expected_answer_keywords": [],
+    "expected_sources": [],
+    "should_answer": false,
+    "risk_type": "low_relevance"
+  },
+  {
+    "id": "DQ011",
+    "question": "How do I reset my SmartHome device to factory settings?",
+    "language": "en",
+    "category": "troubleshooting",
+    "expected_answer_keywords": ["factory reset", "Settings", "System", "Reset", "erase"],
+    "expected_sources": ["troubleshooting.md"],
+    "should_answer": true,
+    "risk_type": null
+  },
+  {
+    "id": "DQ012",
+    "question": "你们有国际配送吗？要多久？",
+    "language": "zh",
+    "category": "shipping",
+    "expected_answer_keywords": ["国际", "7-14", "工作日"],
+    "expected_sources": ["product_faq.md"],
+    "should_answer": true,
+    "risk_type": null
+  },
+  {
+    "id": "DQ013",
+    "question": "My SmartHome camera image is blurry, what should I do?",
+    "language": "en",
+    "category": "troubleshooting",
+    "expected_answer_keywords": ["lens", "clean", "lighting", "resolution", "1080p"],
+    "expected_sources": ["troubleshooting.md"],
+    "should_answer": true,
+    "risk_type": null
+  },
+  {
+    "id": "DQ014",
+    "question": "What are your company's annual revenues?",
+    "language": "en",
+    "category": "unrelated",
+    "expected_answer_keywords": [],
+    "expected_sources": [],
+    "should_answer": false,
+    "risk_type": "hallucination"
+  },
+  {
+    "id": "DQ015",
+    "question": "产品保修和退货政策有什么区别？",
+    "language": "zh",
+    "category": "multi_topic",
+    "expected_answer_keywords": ["保修", "退货", "1年", "7天"],
+    "expected_sources": ["product_faq.md", "return_policy.md"],
+    "should_answer": true,
+    "risk_type": null
+  }
+]

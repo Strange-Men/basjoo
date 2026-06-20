@@ -1,6 +1,6 @@
 # RAG Evaluation Report
 
-**Generated**: 2026-06-19T13:56:23.105102+00:00
+**Generated**: 2026-06-20T05:56:26.428136+00:00
 **Test Mode**: mock
 
 ## Summary
