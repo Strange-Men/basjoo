@@ -121,14 +121,14 @@ ENHANCEMENT_SUMMARY.zh-CN.md              # 本文件（中文版）
 
 ```powershell
 cd backend
-.\venv\Scripts\python.exe -m pytest tests/rag_eval/ -v
+.\venv\Scripts\python.exe -m pytest tests\rag_eval -v
 ```
 
 ### 运行评估 runner（mock 模式）
 
 ```powershell
 cd backend
-.\venv\Scripts\python.exe scripts/run_rag_eval.py --mock
+.\venv\Scripts\python.exe scripts\run_rag_eval.py --mock
 ```
 
 输出文件：
@@ -141,13 +141,13 @@ cd backend
 cd backend
 
 # 验证 JSON 格式（无副作用）
-.\venv\Scripts\python.exe scripts/seed_demo_data.py --validate-only
+.\venv\Scripts\python.exe scripts\seed_demo_data.py --validate-only
 
 # 预览数据摘要
-.\venv\Scripts\python.exe scripts/seed_demo_data.py --dry-run
+.\venv\Scripts\python.exe scripts\seed_demo_data.py --dry-run
 
 # 生成 mock 知识库 fixture
-.\venv\Scripts\python.exe scripts/seed_demo_data.py --mock
+.\venv\Scripts\python.exe scripts\seed_demo_data.py --mock
 ```
 
 ### 三种模式对比

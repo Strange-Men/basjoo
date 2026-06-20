@@ -87,29 +87,29 @@ ENHANCEMENT_SUMMARY.md                     # This file
 
 ### Run pytest
 
-```bash
+```powershell
 cd backend
 
 # Run all RAG eval tests
-.\venv\Scripts\python.exe -m pytest tests/rag_eval/ -v
+.\venv\Scripts\python.exe -m pytest tests\rag_eval -v
 
 # Run specific test file
-.\venv\Scripts\python.exe -m pytest tests/rag_eval/test_retrieval_precision.py -v
+.\venv\Scripts\python.exe -m pytest tests\rag_eval\test_retrieval_precision.py -v
 
 # Run specific test
-.\venv\Scripts\python.exe -m pytest tests/rag_eval/test_no_answer_fallback.py::TestNoAnswerFallback::test_unrelated_query_returns_no_answer -v
+.\venv\Scripts\python.exe -m pytest tests\rag_eval\test_no_answer_fallback.py::TestNoAnswerFallback::test_unrelated_query_returns_no_answer -v
 ```
 
 ### Run Eval Runner
 
-```bash
+```powershell
 cd backend
 
 # Mock mode (default, no API key needed)
-.\venv\Scripts\python.exe scripts/run_rag_eval.py --mock
+.\venv\Scripts\python.exe scripts\run_rag_eval.py --mock
 
 # Custom top-k
-.\venv\Scripts\python.exe scripts/run_rag_eval.py --mock --top-k 3
+.\venv\Scripts\python.exe scripts\run_rag_eval.py --mock --top-k 3
 ```
 
 Output files:
@@ -118,17 +118,17 @@ Output files:
 
 ## How to Run Demo Data Seeder
 
-```bash
+```powershell
 cd backend
 
 # Validate JSON schema only (no side effects)
-.\venv\Scripts\python.exe scripts/seed_demo_data.py --validate-only
+.\venv\Scripts\python.exe scripts\seed_demo_data.py --validate-only
 
 # Print summary of what would be seeded
-.\venv\Scripts\python.exe scripts/seed_demo_data.py --dry-run
+.\venv\Scripts\python.exe scripts\seed_demo_data.py --dry-run
 
 # Generate mock fixtures for tests
-.\venv\Scripts\python.exe scripts/seed_demo_data.py --mock
+.\venv\Scripts\python.exe scripts\seed_demo_data.py --mock
 ```
 
 ### Mode Differences

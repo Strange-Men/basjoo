@@ -129,7 +129,7 @@ Each eval case in `rag_eval_cases.json` has:
 
 ### Prerequisites
 
-```bash
+```powershell
 cd backend
 # Ensure virtual environment is activated
 .\venv\Scripts\activate
@@ -137,34 +137,34 @@ cd backend
 
 ### Run All RAG Eval Tests
 
-```bash
-.\venv\Scripts\python.exe -m pytest tests/rag_eval/ -v
+```powershell
+.\venv\Scripts\python.exe -m pytest tests\rag_eval -v
 ```
 
 ### Run Specific Test File
 
-```bash
-.\venv\Scripts\python.exe -m pytest tests/rag_eval/test_retrieval_precision.py -v
+```powershell
+.\venv\Scripts\python.exe -m pytest tests\rag_eval\test_retrieval_precision.py -v
 ```
 
 ### Run Specific Test
 
-```bash
-.\venv\Scripts\python.exe -m pytest tests/rag_eval/test_no_answer_fallback.py::TestNoAnswerFallback::test_unrelated_query_returns_no_answer -v
+```powershell
+.\venv\Scripts\python.exe -m pytest tests\rag_eval\test_no_answer_fallback.py::TestNoAnswerFallback::test_unrelated_query_returns_no_answer -v
 ```
 
 ## Running Eval Runner
 
 ### Basic Usage
 
-```bash
+```powershell
 cd backend
 
 # Mock mode (default, no API key needed)
-.\venv\Scripts\python.exe scripts/run_rag_eval.py --mock
+.\venv\Scripts\python.exe scripts\run_rag_eval.py --mock
 
 # Custom top-k
-.\venv\Scripts\python.exe scripts/run_rag_eval.py --mock --top-k 3
+.\venv\Scripts\python.exe scripts\run_rag_eval.py --mock --top-k 3
 ```
 
 ### Output
@@ -184,17 +184,17 @@ The runner generates:
 
 ### Basic Usage
 
-```bash
+```powershell
 cd backend
 
 # Validate JSON schema only (no side effects)
-.\venv\Scripts\python.exe scripts/seed_demo_data.py --validate-only
+.\venv\Scripts\python.exe scripts\seed_demo_data.py --validate-only
 
 # Print summary of what would be seeded
-.\venv\Scripts\python.exe scripts/seed_demo_data.py --dry-run
+.\venv\Scripts\python.exe scripts\seed_demo_data.py --dry-run
 
 # Generate mock fixtures for tests
-.\venv\Scripts\python.exe scripts/seed_demo_data.py --mock
+.\venv\Scripts\python.exe scripts\seed_demo_data.py --mock
 ```
 
 ### Mode Differences
@@ -277,7 +277,7 @@ To evaluate real RAG quality (requires API keys + Qdrant):
 
 1. **Ingest demo knowledge base**:
    ```bash
-   python scripts/seed_demo_data.py --write-db
+   python scripts\seed_demo_data.py --write-db
    ```
 
 2. **Replace mock components**:
@@ -287,7 +287,7 @@ To evaluate real RAG quality (requires API keys + Qdrant):
 
 3. **Run evaluation**:
    ```bash
-   python scripts/run_rag_eval.py
+   python scripts\run_rag_eval.py
    ```
 
 ### What Stays the Same
