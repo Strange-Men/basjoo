@@ -1,6 +1,6 @@
 # RAG Evaluation: Mock vs Real Comparison
 
-**Generated**: 2026-06-23T09:51:46.544702+00:00
+**Generated**: 2026-06-23T13:18:18.637924+00:00
 
 ## Overview
 
@@ -11,10 +11,10 @@ with the real RAG evaluation (SiliconFlow embedding, Qdrant vector search).
 
 | Metric | Mock | Real | Delta |
 |---|---|---|---|
-| Precision@3 | 0.567 | 0.800 | +0.233 |
-| Recall@3 | 0.978 | 1.000 | +0.022 |
-| MRR | 0.600 | 0.800 | +0.200 |
-| Hit Rate | N/A | 0.800 | — |
+| Precision@3 | 0.567 | 0.600 | +0.033 |
+| Recall@3 | 0.978 | 0.950 | -0.028 |
+| MRR | 0.600 | 0.600 | 0.000 |
+| Hit Rate | N/A | 0.600 | — |
 | No-Answer Accuracy | 100.0% | 100.0% | — |
 
 ## Case-by-Case Comparison
@@ -23,8 +23,13 @@ with the real RAG evaluation (SiliconFlow embedding, Qdrant vector search).
 |---|---|---|---|
 | TC001 | How do I return a product? | PASS | PASS |
 | TC002 | 产品保修多久？ | PASS | PASS |
+| TC004 | What is the warranty and return policy f | PASS | PASS |
 | TC006 | What is the weather like today? | PASS | PASS |
+| TC007 | 你们公司的股票代码是什么？ | PASS | PASS |
+| TC008 | Can you recommend a good restaurant near | PASS | PASS |
 | TC010 | What is the return window for purchases? | PASS | PASS |
+| TC011 | 产品保修包含哪些情况？ | PASS | PASS |
+| TC012 | What is the company's headquarters addre | PASS | PASS |
 | TC014 | 设备无法开机怎么办？ | PASS | PASS |
 
 ## Analysis
@@ -37,7 +42,7 @@ with the real RAG evaluation (SiliconFlow embedding, Qdrant vector search).
 
 ### Real Mode Limitations
 
-- Only 5 eval cases selected (not full 15)
+- 10 eval cases selected (not full 15)
 - Retrieval only — no LLM answer generation or hallucination check
 - SiliconFlow Qwen3-Embedding-0.6B is a small model — production may use larger
 - No-answer threshold: 0.45 (cosine score)
@@ -50,7 +55,7 @@ with the real RAG evaluation (SiliconFlow embedding, Qdrant vector search).
 
 ## Next Steps
 
-- Run full 15 cases with real retrieval
+- Consider running all 15 cases with real retrieval
 - Add LLM answer generation evaluation
 - Test with larger embedding models
 - Add latency benchmarks

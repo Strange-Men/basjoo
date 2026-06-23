@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "timestamp": "2026-06-23T09:50:43.826843+00:00",
+    "timestamp": "2026-06-23T13:17:32.046642+00:00",
     "test_mode": "mock",
     "total_cases": 15,
     "passed_cases": 15,
@@ -120,8 +120,8 @@
       "returned_sources": [],
       "expected_sources": [
         "return_policy.md",
-        "product_faq.md",
-        "troubleshooting.md"
+        "troubleshooting.md",
+        "product_faq.md"
       ],
       "hallucination_markers": [],
       "fail_reason": ""

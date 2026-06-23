@@ -298,7 +298,7 @@ def generate_markdown_report(report, output_path):
 # Real eval mode — SiliconFlow embedding + Qdrant retrieval (v2.0)
 # ---------------------------------------------------------------------------
 
-REAL_EVAL_CASE_IDS = ["TC001", "TC002", "TC006", "TC010", "TC014"]
+REAL_EVAL_CASE_IDS = ["TC001", "TC002", "TC004", "TC006", "TC007", "TC008", "TC010", "TC011", "TC012", "TC014"]
 DEFAULT_COLLECTION = "customerops_demo_real_eval"
 REAL_NO_ANSWER_THRESHOLD = 0.45  # Qdrant cosine score threshold
 
@@ -686,7 +686,7 @@ def generate_comparison_report(real_report: dict, real_metrics: dict, mock_repor
         "",
         "### Real Mode Limitations",
         "",
-        "- Only 5 eval cases selected (not full 15)",
+        "- 10 eval cases selected (not full 15)",
         "- Retrieval only — no LLM answer generation or hallucination check",
         "- SiliconFlow Qwen3-Embedding-0.6B is a small model — production may use larger",
         f"- No-answer threshold: {REAL_NO_ANSWER_THRESHOLD} (cosine score)",
@@ -699,7 +699,7 @@ def generate_comparison_report(real_report: dict, real_metrics: dict, mock_repor
         "",
         "## Next Steps",
         "",
-        "- Run full 15 cases with real retrieval",
+        "- Consider running all 15 cases with real retrieval",
         "- Add LLM answer generation evaluation",
         "- Test with larger embedding models",
         "- Add latency benchmarks",

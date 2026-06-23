@@ -39,16 +39,26 @@ class TestRealEvalConfig:
         assert mod.EMBEDDING_DIM == 1024
 
     def test_real_eval_case_ids(self):
-        """Real eval should select 5 specific test cases."""
+        """Real eval should select 10 specific test cases."""
         import importlib.util
         spec = importlib.util.spec_from_file_location(
             "run_rag_eval", SCRIPTS_DIR / "run_rag_eval.py"
         )
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
-        assert len(mod.REAL_EVAL_CASE_IDS) == 5
+        assert len(mod.REAL_EVAL_CASE_IDS) == 10
+        # Original 5 cases
         assert "TC001" in mod.REAL_EVAL_CASE_IDS
+        assert "TC002" in mod.REAL_EVAL_CASE_IDS
         assert "TC006" in mod.REAL_EVAL_CASE_IDS  # no-answer case
+        assert "TC010" in mod.REAL_EVAL_CASE_IDS
+        assert "TC014" in mod.REAL_EVAL_CASE_IDS
+        # New 5 cases (v2.1.1)
+        assert "TC004" in mod.REAL_EVAL_CASE_IDS  # multi_doc_retrieval
+        assert "TC007" in mod.REAL_EVAL_CASE_IDS  # no_answer_fallback ZH
+        assert "TC008" in mod.REAL_EVAL_CASE_IDS  # low_relevance_reject
+        assert "TC011" in mod.REAL_EVAL_CASE_IDS  # evidence_citation ZH
+        assert "TC012" in mod.REAL_EVAL_CASE_IDS  # hallucination_risk
 
     def test_real_no_answer_threshold(self):
         """No-answer threshold should be a reasonable float."""
