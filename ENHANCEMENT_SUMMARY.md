@@ -7,7 +7,7 @@
 This document describes the enhancements made to the Basjoo AI customer support platform through secondary development. The work focuses on **RAG quality evaluation**, **demo data provisioning**, and **engineering verifiability** — all achievable without real API keys or external services.
 
 **Branch**: `phase1-rag-eval-harness`
-**Current Version**: v2.0-real-qdrant-eval-adapter
+**Current Version**: v2.1.2
 
 ## What Was Added
 
@@ -231,15 +231,51 @@ The evaluation harness is designed to:
 4. **No multi-turn conversation evaluation** — single-turn only
 5. **No latency/performance metrics** — quality-focused
 6. **Real mode evaluates retrieval only** — no LLM chat eval, no hallucination check
+7. **No API-level chat evaluation** — only retrieval quality is measured
+8. **No answer generation evaluation** — LLM response quality is not assessed
+9. **No frontend display** — no UI components included
+10. **No production deployment** — evaluation framework only
+
+## Security
+
+- `.env` files are not committed to the repository.
+- API keys are not written into documentation.
+- Reports do not contain real API keys.
+
+## Version History
+
+### v2.1.1 — Real Eval Case Expansion
+
+- Expanded real eval cases from 5 to 10
+- Covers all 6 scenario types: normal_hit, multi_doc_retrieval, no_answer_fallback, low_relevance_reject, evidence_citation, hallucination_risk
+- Includes both English and Chinese cases
+- 50 pytest tests pass
+- Mock eval continues with 15 cases
+- Real eval now has 10 cases, all pass
+
+### v2.1.2 — Mismatch Analysis
+
+- Added `_compute_mismatch()` function for per-case mismatch analysis
+- New fields: `language`, `returned_sources_top3`, `matched_sources`, `missing_sources`, `unexpected_sources`, `mismatch_type`, `analysis_note`
+- `mismatch_type` enum: none, missing_expected_source, unexpected_source_in_top3, low_rank_expected_source, no_answer_with_retrieval_noise, low_confidence_match
+- Added 6 pytest tests (TestMismatchAnalysis), pure logic tests, no API calls
+- 50 pytest tests pass
+- Key finding: Precision@3=0.600 is metric artifact (no-answer cases drag it down), actual normal cases = 1.000
+- Key finding: TC004 is only real retrieval issue (return_policy.md not in top-5)
 
 ## Next Steps
 
-### v2.1 — Extended Real Eval (Future)
+### v2.1.3 — Report and Docs Polish (Current)
 
-- Run full 15 cases with real retrieval
-- Add LLM answer generation evaluation
-- Test with larger embedding models
-- Add latency benchmarks
+- Polish report format and documentation
+- Add version history and change descriptions
+- Add metrics interpretation
+- Add limitations and security notes
+
+### v2.1.4 — Quality Audit and Freeze Tag
+
+- Quality audit of v2.1.x changes
+- Create freeze tag for v2.1.x
 
 ### v3.0 — Full RAG Pipeline Eval (Future)
 
@@ -249,5 +285,5 @@ The evaluation harness is designed to:
 
 ---
 
-*Version: v1.2-docs-and-report*
-*Last updated: 2026-06-20*
+*Version: v2.1.2*
+*Last updated: 2026-06-23*

@@ -44,22 +44,29 @@ Quality Metrics:
 - Hallucination Risk Cases: 0
 ```
 
-## Real Mode Results (v2.0)
+## Real Mode Results (v2.1.2)
 
 ```
-Total cases: 5
-Passed: 5 (100%)
+Total cases: 10
+Passed: 10 (100%)
 Failed: 0 (0%)
 
 Retrieval Metrics:
-- Precision@3: 0.733
-- Recall@3: 1.000
-- MRR: 0.800
-- Hit Rate: 0.800
+- Precision@3: 0.600
+- Recall@3: 0.950
+- MRR: 0.600
+- Hit Rate: 0.600
 - No-Answer Accuracy: 100.0%
 ```
 
-**Note**: Real mode evaluates retrieval only (5 cases), not LLM answer generation.
+**Note**: Real mode evaluates retrieval only (10 cases), not LLM answer generation.
+
+### Metrics Interpretation
+
+- **Precision@3 = 0.600**: Mainly affected by no-answer cases where precision=0 by definition. For 6 answerable cases, Precision@3 = 1.000.
+- **Recall@3 = 0.950**: 95% of expected sources found in top-3. Only TC004 has recall gap.
+- **MRR = 0.600**: Expected source not always at rank 1. TC004 is the main gap.
+- **TC004**: Only real retrieval issue — `return_policy.md` not in top-5 for multi-doc query.
 
 ## Version History
 
@@ -68,7 +75,23 @@ Retrieval Metrics:
 | v1.0 | 2026-06-19 | Initial report with 15 eval cases |
 | v1.1 | 2026-06-20 | Added demo data seeder |
 | v1.2 | 2026-06-20 | Polished report format |
-| v2.0 | 2026-06-23 | Real Qdrant retrieval eval + comparison report |
+| v2.0 | 2026-06-23 | Real Qdrant retrieval eval + comparison report (5 cases) |
+| v2.1.1 | 2026-06-23 | Expanded real eval cases from 5 to 10, covering all 6 scenario types |
+| v2.1.2 | 2026-06-23 | Added mismatch analysis per case (returned_sources, matched/missing/unexpected, mismatch_type) |
+
+## Limitations
+
+- **Retrieval eval only**: Reports evaluate whether the right documents are retrieved. They do NOT evaluate LLM answer quality, hallucination, or response correctness.
+- **No chat eval**: No API-level chat evaluation is performed.
+- **No answer generation eval**: No LLM-generated answers are evaluated.
+- **No frontend**: No UI or frontend display is included.
+- **No deployment**: No production deployment is involved.
+
+## Security
+
+- `.env` files are not committed to the repository.
+- API keys are not written into documentation.
+- Reports do not contain real API keys.
 
 ---
 

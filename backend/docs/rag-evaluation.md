@@ -260,7 +260,17 @@ The Markdown report includes:
 3. **Eval cases are manually curated** — not auto-generated
 4. **No multi-turn conversation evaluation** — single-turn only
 5. **No latency/performance metrics** — quality-focused
-6. **Real mode evaluates retrieval only** — no LLM chat eval
+6. **Real mode evaluates retrieval only** — no LLM chat eval, no hallucination check
+7. **No API-level chat evaluation** — only retrieval quality is measured
+8. **No answer generation evaluation** — LLM response quality is not assessed
+9. **No frontend display** — no UI components included
+10. **No production deployment** — evaluation framework only
+
+## Security
+
+- `.env` files are not committed to the repository.
+- API keys are not written into documentation.
+- Reports do not contain real API keys.
 
 ## Real Qdrant Retrieval Evaluation (v2.0)
 
@@ -314,15 +324,24 @@ dir reports\rag_eval_real_report.md
 dir reports\rag_eval_mock_vs_real.md
 ```
 
-### Real Eval Cases (5 selected)
+### Real Eval Cases (10 selected, v2.1.1)
 
 | ID | Language | Scenario | Expected Sources |
 |---|---|---|---|
 | TC001 | EN | normal_hit | return_policy.md |
 | TC002 | ZH | normal_hit | product_faq.md |
+| TC004 | EN | multi_doc_retrieval | return_policy.md, product_faq.md |
 | TC006 | EN | no_answer_fallback | (none) |
+| TC007 | ZH | no_answer_fallback | (none) |
+| TC008 | EN | low_relevance_reject | (none) |
 | TC010 | EN | evidence_citation | return_policy.md |
+| TC011 | ZH | evidence_citation | product_faq.md |
+| TC012 | EN | hallucination_risk | (none) |
 | TC014 | ZH | normal_hit | troubleshooting.md |
+
+**v2.1.1 changes**: Expanded from 5 to 10 cases, covering all 6 scenario types (normal_hit, multi_doc_retrieval, no_answer_fallback, low_relevance_reject, evidence_citation, hallucination_risk). Includes both English and Chinese cases.
+
+**v2.1.2 changes**: Added per-case mismatch analysis with fields: `returned_sources_top3`, `matched_sources`, `missing_sources`, `unexpected_sources`, `mismatch_type`, `analysis_note`.
 
 ### Real Mode Metrics
 
@@ -334,9 +353,16 @@ dir reports\rag_eval_mock_vs_real.md
 | Hit Rate | Whether any expected doc appears in top-k |
 | No-Answer Accuracy | Correct rejection rate for irrelevant queries |
 
+### Metrics Interpretation (v2.1.2)
+
+- **Precision@3 = 0.600**: Mainly affected by no-answer cases where precision=0 by definition. For 6 answerable cases, Precision@3 = 1.000.
+- **Recall@3 = 0.950**: 95% of expected sources found in top-3. Only TC004 has recall gap.
+- **MRR = 0.600**: Expected source not always at rank 1. TC004 is the main gap.
+- **TC004**: Only real retrieval issue — `return_policy.md` not in top-5 for multi-doc query.
+
 ### What Stays the Same
 
-- Test structure (15 eval cases for mock, 5 for real)
+- Test structure (15 eval cases for mock, 10 for real)
 - Metrics computation (precision, recall, MRR, etc.)
 - Report generation (JSON + Markdown)
 - Demo data format
@@ -350,7 +376,20 @@ dir reports\rag_eval_mock_vs_real.md
 - Uses Qdrant REST API (urllib, avoids qdrant_client version issues)
 - Generates mock vs real comparison report
 
+### What Changed in v2.1.1
+
+- Real eval cases expanded from 5 to 10
+- Covers all 6 scenario types: normal_hit, multi_doc_retrieval, no_answer_fallback, low_relevance_reject, evidence_citation, hallucination_risk
+- Includes both English and Chinese cases
+
+### What Changed in v2.1.2
+
+- Added per-case mismatch analysis
+- New fields: `returned_sources_top3`, `matched_sources`, `missing_sources`, `unexpected_sources`, `mismatch_type`, `analysis_note`
+- Key finding: Precision@3=0.600 is metric artifact (no-answer cases drag it down)
+- Key finding: TC004 is only real retrieval issue
+
 ---
 
-*Version: v2.0-real-qdrant-eval-adapter*
+*Version: v2.1.2*
 *Last updated: 2026-06-23*

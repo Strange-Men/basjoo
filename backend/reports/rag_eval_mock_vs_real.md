@@ -1,6 +1,7 @@
 # RAG Evaluation: Mock vs Real Comparison
 
 **Generated**: 2026-06-23T13:38:44.768722+00:00
+**Version**: v2.1.2 (10 real eval cases with mismatch analysis)
 
 ## Overview
 
@@ -81,6 +82,20 @@ For normal single-source cases, MRR = 1.0 (expected source is always rank 1).
 This analysis covers **retrieval quality only** — whether the right documents
 are retrieved. It does NOT evaluate LLM answer quality, hallucination, or
 response correctness. Those require a separate chat evaluation pipeline.
+
+## Limitations
+
+- **Retrieval eval only**: This report evaluates whether the right documents are retrieved. It does NOT evaluate LLM answer quality, hallucination, or response correctness.
+- **No chat eval**: No API-level chat evaluation is performed.
+- **No answer generation eval**: No LLM-generated answers are evaluated.
+- **No frontend**: No UI or frontend display is included.
+- **No deployment**: No production deployment is involved.
+
+## Security
+
+- `.env` files are not committed to the repository.
+- API keys are not written into documentation.
+- This report does not contain real API keys.
 
 ## Next Steps
 

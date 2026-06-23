@@ -4,6 +4,7 @@
 **Test Mode**: real (SiliconFlow + Qdrant)
 **Collection**: customerops_demo_real_eval
 **Embedding Model**: Qwen/Qwen3-Embedding-0.6B
+**Version**: v2.1.2 (10 cases with mismatch analysis)
 
 ## Summary
 
@@ -68,3 +69,37 @@ Per-case mismatch diagnostics for retrieval quality debugging.
 - Real retrieval using SiliconFlow embedding + Qdrant vector search
 - No-answer threshold: 0.45 (cosine score)
 - This evaluates retrieval only, not LLM answer generation
+
+## Metrics Interpretation
+
+### Precision@3 = 0.600
+
+Precision@3 = 0.600 does **not** indicate overall system failure. The main reason is that 4 no-answer cases (TC006, TC007, TC008, TC012) have `expected_sources = []`, giving precision=0.0 by definition. For the 6 answerable cases (TC001, TC002, TC004, TC010, TC011, TC014), Precision@3 is actually **1.000**.
+
+The aggregate 0.600 is a metric artifact, not a retrieval quality issue.
+
+### Recall@3 = 0.950
+
+Recall@3 = 0.950 means 95% of expected sources are found in top-3. The only recall gap is TC004 (multi_doc_retrieval): expected both `return_policy.md` and `product_faq.md`, but only `product_faq.md` appeared in top-3 (recall=0.50).
+
+### MRR = 0.600
+
+MRR = 0.600 indicates the expected source is not always at rank 1. For TC004, the expected `return_policy.md` is not in top-5 at all (MRR=0 for that source). For normal single-source cases, MRR = 1.0.
+
+### TC004: Current Retrieval Gap
+
+TC004 is the only real retrieval issue. The query "What is the warranty and return policy for electronics?" is semantically closer to `product_faq.md` chunks than `return_policy.md` chunks, causing `return_policy.md` to not appear in top-5.
+
+## Limitations
+
+- **Retrieval eval only**: This report evaluates whether the right documents are retrieved. It does NOT evaluate LLM answer quality, hallucination, or response correctness.
+- **No chat eval**: No API-level chat evaluation is performed.
+- **No answer generation eval**: No LLM-generated answers are evaluated.
+- **No frontend**: No UI or frontend display is included.
+- **No deployment**: No production deployment is involved.
+
+## Security
+
+- `.env` files are not committed to the repository.
+- API keys are not written into documentation.
+- This report does not contain real API keys.

@@ -1,8 +1,8 @@
 # Basjoo 二次开发增强说明（中文版）
 
-> **面向**：中国 HR / 技术面试官 / 作品集访问者
+> **面向**：技术审查 / 工程记录
 > **分支**：`phase1-rag-eval-harness`
-> **当前版本**：v2.0-real-qdrant-eval-adapter
+> **当前版本**：v2.1.2
 
 ---
 
@@ -256,17 +256,55 @@ tests/rag_eval/: 37 passed
 4. **没有多轮对话评估** — 只评估单轮
 5. **没有延迟/性能指标** — 只关注质量
 6. **真实模式只评估检索** — 不评估 LLM 回答生成和幻觉检测
+7. **不做 API 级别 chat eval** — 只评估检索质量
+8. **不做 LLM 回答生成评估** — 不评估 LLM 回答质量
+9. **不做前端展示** — 不包含 UI 组件
+10. **不做线上部署** — 只是评估框架
+
+## 9. 安全说明
+
+- `.env` 文件不提交到仓库
+- API Key 不写入文档
+- 报告不包含真实 key
 
 ---
 
-## 9. 下一步计划
+## 10. 版本历史
 
-### v2.1 — 扩展真实评估（未来）
+### v2.1.1 — Real Eval Case Expansion
 
-- 对全部 15 个 cases 运行真实检索评估
-- 添加 LLM 回答生成评估
-- 测试更大的 embedding 模型
-- 添加延迟基准测试
+- Real eval cases 从 5 个扩展到 10 个
+- 覆盖全部 6 种 scenario 类型：normal_hit、multi_doc_retrieval、no_answer_fallback、low_relevance_reject、evidence_citation、hallucination_risk
+- 包含中英文 cases
+- 50 个 pytest 测试全部通过
+- Mock eval 继续 15 cases 全部通过
+- Real eval 变成 10 cases，全部通过
+
+### v2.1.2 — Mismatch Analysis
+
+- 新增 `_compute_mismatch()` 函数，为每个 real eval case 计算 mismatch 分析
+- 新增字段：`language`、`returned_sources_top3`、`matched_sources`、`missing_sources`、`unexpected_sources`、`mismatch_type`、`analysis_note`
+- `mismatch_type` 枚举：none、missing_expected_source、unexpected_source_in_top3、low_rank_expected_source、no_answer_with_retrieval_noise、low_confidence_match
+- 新增 6 个 pytest 测试（TestMismatchAnalysis），纯逻辑测试，不调用 API
+- 50 个 pytest 测试全部通过
+- 关键发现：Precision@3=0.600 是 metric artifact（no-answer cases 拉低），实际 normal cases 为 1.000
+- 关键发现：TC004 是唯一真实检索问题（return_policy.md 未进 top-5）
+
+---
+
+## 11. 下一步计划
+
+### v2.1.3 — 报告格式和文档收尾（当前）
+
+- 收尾报告格式和文档
+- 添加版本历史和变更说明
+- 添加指标解释
+- 添加限制说明和安全说明
+
+### v2.1.4 — 质量审计和 freeze tag
+
+- 质量审计 v2.1.x 变更
+- 创建 v2.1.x freeze tag
 
 ### v3.0 — 完整 RAG 管道评估（未来）
 
@@ -276,26 +314,5 @@ tests/rag_eval/: 37 passed
 
 ---
 
-## 10. 简历项目描述
-
-### 中文版（适合直接放简历）
-
-> 基于开源 AI 客服系统 Basjoo 进行二次开发，构建 RAG Evaluation Harness 与 SmartHome Demo Data，覆盖检索命中、无答案回退、证据引用、幻觉风险等 15 类评估用例，并通过 pytest 与独立 runner 生成 JSON / Markdown 评估报告。设计 Mock Embedding / Retriever / Pipeline 实现无 API Key、无 Qdrant 环境下的可复现评估。
-
-### English Version
-
-> Enhanced an open-source AI customer support platform (Basjoo) by adding a mock-friendly RAG evaluation harness with 15 eval cases covering retrieval precision, no-answer fallback, citation accuracy, and hallucination risk. Built deterministic mock pipeline enabling reproducible evaluation without API keys or external services.
-
-### 详细版（适合作品集）
-
-- 设计并实现 RAG 评估框架，包含 15 个测试用例，覆盖 6 类场景
-- 构建基于字符频率向量的 Mock Embedding 系统，实现确定性、无 API Key 的测试
-- 实现标准 IR 指标：Precision@k、Recall@k、MRR、No-Answer Accuracy、Citation Accuracy
-- 创建 SmartHome 演示数据集：2 个 Agent、3 篇知识文档、15 个问题、3 个对话、8 个 Bad Cases
-- 达成 37 个 pytest 测试全部通过，15/15 eval cases 全部通过，无回归
-- 生成 JSON + Markdown 评估报告，含执行摘要和指标分析
-
----
-
-*版本：v1.3-phase1-complete*
-*最后更新：2026-06-20*
+*版本：v2.1.2*
+*最后更新：2026-06-23*
