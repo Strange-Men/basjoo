@@ -1,6 +1,6 @@
 # RAG Evaluation: Mock vs Real Comparison
 
-**Generated**: 2026-06-23T09:17:21.209666+00:00
+**Generated**: 2026-06-23T09:51:46.544702+00:00
 
 ## Overview
 
@@ -11,7 +11,7 @@ with the real RAG evaluation (SiliconFlow embedding, Qdrant vector search).
 
 | Metric | Mock | Real | Delta |
 |---|---|---|---|
-| Precision@3 | 0.567 | 0.733 | +0.167 |
+| Precision@3 | 0.567 | 0.800 | +0.233 |
 | Recall@3 | 0.978 | 1.000 | +0.022 |
 | MRR | 0.600 | 0.800 | +0.200 |
 | Hit Rate | N/A | 0.800 | — |
