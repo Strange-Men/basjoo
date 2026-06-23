@@ -116,3 +116,103 @@ class TestRealEvalConfig:
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
         assert "reports" in str(mod.REPORTS_DIR)
+
+
+class TestMismatchAnalysis:
+    """Test mismatch analysis logic — pure unit tests, no API calls."""
+
+    @staticmethod
+    def _load_mod():
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "run_rag_eval", SCRIPTS_DIR / "run_rag_eval.py"
+        )
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod
+
+    def test_mismatch_type_enum(self):
+        """All mismatch types should be valid strings from the defined enum."""
+        mod = self._load_mod()
+        assert isinstance(mod.MISMATCH_TYPES, list)
+        assert len(mod.MISMATCH_TYPES) == 6
+        for t in mod.MISMATCH_TYPES:
+            assert isinstance(t, str)
+            # Each type should be lowercase alphanumeric with underscores only
+            assert all(c.isalnum() or c == "_" for c in t)
+
+    def test_full_match_returns_none(self):
+        """When all expected sources are in top-3, mismatch_type should be 'none'."""
+        mod = self._load_mod()
+        result = mod._compute_mismatch(
+            retrieved_top3=["doc_a.md", "doc_b.md", "doc_c.md"],
+            returned_sources_top5=["doc_a.md", "doc_b.md", "doc_c.md", "doc_d.md", "doc_e.md"],
+            expected_set={"doc_a.md"},
+            scenario="normal_hit",
+            top_score=0.7,
+            no_answer_detected=False,
+        )
+        assert result["mismatch_type"] == "none"
+        assert result["matched_sources"] == ["doc_a.md"]
+        assert result["missing_sources"] == []
+        # unexpected_sources may contain extra docs from top-3 that are not expected
+        # but mismatch_type is still "none" because all expected were found
+
+    def test_missing_expected_source(self):
+        """When expected source is not in top-5, mismatch_type should be 'missing_expected_source'."""
+        mod = self._load_mod()
+        result = mod._compute_mismatch(
+            retrieved_top3=["doc_a.md", "doc_b.md", "doc_c.md"],
+            returned_sources_top5=["doc_a.md", "doc_b.md", "doc_c.md", "doc_d.md", "doc_e.md"],
+            expected_set={"doc_x.md"},
+            scenario="normal_hit",
+            top_score=0.7,
+            no_answer_detected=False,
+        )
+        assert result["mismatch_type"] == "missing_expected_source"
+        assert result["matched_sources"] == []
+        assert "doc_x.md" in result["missing_sources"]
+
+    def test_low_rank_expected_source(self):
+        """When expected source is in top-5 but not top-3, should detect low_rank_expected_source."""
+        mod = self._load_mod()
+        result = mod._compute_mismatch(
+            retrieved_top3=["doc_a.md", "doc_b.md", "doc_c.md"],
+            returned_sources_top5=["doc_a.md", "doc_b.md", "doc_c.md", "doc_x.md", "doc_e.md"],
+            expected_set={"doc_a.md", "doc_x.md"},
+            scenario="multi_doc_retrieval",
+            top_score=0.7,
+            no_answer_detected=False,
+        )
+        assert result["mismatch_type"] == "low_rank_expected_source"
+        assert "doc_a.md" in result["matched_sources"]
+        assert "doc_x.md" in result["missing_sources"]
+
+    def test_no_answer_with_retrieval_noise(self):
+        """No-answer case with high top_score should be 'no_answer_with_retrieval_noise'."""
+        mod = self._load_mod()
+        result = mod._compute_mismatch(
+            retrieved_top3=["doc_a.md", "doc_b.md", "doc_c.md"],
+            returned_sources_top5=["doc_a.md", "doc_b.md", "doc_c.md", "doc_d.md", "doc_e.md"],
+            expected_set=set(),
+            scenario="no_answer_fallback",
+            top_score=0.50,
+            no_answer_detected=False,
+        )
+        assert result["mismatch_type"] == "no_answer_with_retrieval_noise"
+        assert result["matched_sources"] == []
+        assert result["missing_sources"] == []
+
+    def test_no_answer_correct_low_score(self):
+        """No-answer case with low top_score should be 'none' (correctly detected)."""
+        mod = self._load_mod()
+        result = mod._compute_mismatch(
+            retrieved_top3=["doc_a.md", "doc_b.md", "doc_c.md"],
+            returned_sources_top5=["doc_a.md", "doc_b.md", "doc_c.md", "doc_d.md", "doc_e.md"],
+            expected_set=set(),
+            scenario="no_answer_fallback",
+            top_score=0.30,
+            no_answer_detected=True,
+        )
+        assert result["mismatch_type"] == "none"
+        assert result["analysis_note"] == "Correctly identified as no-answer"

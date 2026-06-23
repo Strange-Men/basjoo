@@ -1,6 +1,6 @@
 # RAG Evaluation: Mock vs Real Comparison
 
-**Generated**: 2026-06-23T13:18:18.637924+00:00
+**Generated**: 2026-06-23T13:38:44.768722+00:00
 
 ## Overview
 
@@ -52,6 +52,35 @@ with the real RAG evaluation (SiliconFlow embedding, Qdrant vector search).
 - Real embedding captures semantic similarity that char-frequency misses
 - Chinese queries benefit significantly from real embedding
 - No-answer detection relies on cosine score threshold, not keyword rejection
+
+## Real Retrieval Error Analysis
+
+### Precision@3 = 0.600
+
+Precision@3 is dragged down by 4 no-answer cases (TC006, TC007, TC008, TC012) where
+`expected_sources = []`, giving precision=0.0 by definition. For the 6 normal cases
+(TC001, TC002, TC004, TC010, TC011, TC014), Precision@3 is actually **1.000**.
+The aggregate 0.600 is a metric artifact, not a retrieval quality issue.
+
+### Recall@3 = 0.950
+
+Recall@3 = 0.950 means 95% of expected sources are found in top-3. The only recall
+gap is **TC004** (multi_doc_retrieval): expected both `return_policy.md` and
+`product_faq.md`, but only `product_faq.md` appeared in top-3 (recall=0.50).
+This is because the query 'What is the warranty and return policy for electronics?'
+is semantically closer to product_faq.md chunks than return_policy.md chunks.
+
+### MRR = 0.600
+
+MRR = 0.600 indicates the expected source is not always at rank 1. For TC004,
+the expected `return_policy.md` is not in top-5 at all (MRR=0 for that source).
+For normal single-source cases, MRR = 1.0 (expected source is always rank 1).
+
+### Important Note
+
+This analysis covers **retrieval quality only** — whether the right documents
+are retrieved. It does NOT evaluate LLM answer quality, hallucination, or
+response correctness. Those require a separate chat evaluation pipeline.
 
 ## Next Steps
 

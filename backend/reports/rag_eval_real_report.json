@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "timestamp": "2026-06-23T13:18:18.621508+00:00",
+    "timestamp": "2026-06-23T13:38:44.749296+00:00",
     "test_mode": "real",
     "collection": "customerops_demo_real_eval",
     "embedding_model": "Qwen/Qwen3-Embedding-0.6B",
@@ -20,6 +20,7 @@
     {
       "test_id": "TC001",
       "scenario": "normal_hit",
+      "language": "en",
       "query": "How do I return a product?",
       "passed": true,
       "precision_at_3": 1.0,
@@ -35,21 +36,34 @@
         "return_policy.md",
         "return_policy.md"
       ],
+      "returned_sources_top3": [
+        "return_policy.md",
+        "return_policy.md",
+        "return_policy.md"
+      ],
       "expected_sources": [
         "return_policy.md"
       ],
-      "fail_reason": ""
+      "fail_reason": "",
+      "matched_sources": [
+        "return_policy.md"
+      ],
+      "missing_sources": [],
+      "unexpected_sources": [],
+      "mismatch_type": "none",
+      "analysis_note": "All expected sources found in top-3"
     },
     {
       "test_id": "TC002",
       "scenario": "normal_hit",
+      "language": "zh",
       "query": "产品保修多久？",
       "passed": true,
       "precision_at_3": 1.0,
       "recall_at_3": 1.0,
       "mrr": 1.0,
       "hit_rate": 1.0,
-      "top_score": 0.6666,
+      "top_score": 0.6672,
       "no_answer_detected": false,
       "returned_sources": [
         "product_faq.md",
@@ -58,14 +72,27 @@
         "product_faq.md",
         "product_faq.md"
       ],
+      "returned_sources_top3": [
+        "product_faq.md",
+        "product_faq.md",
+        "product_faq.md"
+      ],
       "expected_sources": [
         "product_faq.md"
       ],
-      "fail_reason": ""
+      "fail_reason": "",
+      "matched_sources": [
+        "product_faq.md"
+      ],
+      "missing_sources": [],
+      "unexpected_sources": [],
+      "mismatch_type": "none",
+      "analysis_note": "All expected sources found in top-3"
     },
     {
       "test_id": "TC004",
       "scenario": "multi_doc_retrieval",
+      "language": "en",
       "query": "What is the warranty and return policy for electronics?",
       "passed": true,
       "precision_at_3": 1.0,
@@ -81,22 +108,37 @@
         "product_faq.md",
         "product_faq.md"
       ],
-      "expected_sources": [
-        "return_policy.md",
+      "returned_sources_top3": [
+        "product_faq.md",
+        "product_faq.md",
         "product_faq.md"
       ],
-      "fail_reason": ""
+      "expected_sources": [
+        "product_faq.md",
+        "return_policy.md"
+      ],
+      "fail_reason": "",
+      "matched_sources": [
+        "product_faq.md"
+      ],
+      "missing_sources": [
+        "return_policy.md"
+      ],
+      "unexpected_sources": [],
+      "mismatch_type": "missing_expected_source",
+      "analysis_note": "Expected ['return_policy.md'] not found in top-5"
     },
     {
       "test_id": "TC006",
       "scenario": "no_answer_fallback",
+      "language": "en",
       "query": "What is the weather like today?",
       "passed": true,
       "precision_at_3": 0.0,
       "recall_at_3": 1.0,
       "mrr": 0.0,
       "hit_rate": 0.0,
-      "top_score": 0.2774,
+      "top_score": 0.2767,
       "no_answer_detected": true,
       "returned_sources": [
         "product_faq.md",
@@ -105,12 +147,25 @@
         "product_faq.md",
         "product_faq.md"
       ],
+      "returned_sources_top3": [
+        "product_faq.md",
+        "product_faq.md",
+        "product_faq.md"
+      ],
       "expected_sources": [],
-      "fail_reason": ""
+      "fail_reason": "",
+      "matched_sources": [],
+      "missing_sources": [],
+      "unexpected_sources": [
+        "product_faq.md"
+      ],
+      "mismatch_type": "none",
+      "analysis_note": "Correctly identified as no-answer"
     },
     {
       "test_id": "TC007",
       "scenario": "no_answer_fallback",
+      "language": "zh",
       "query": "你们公司的股票代码是什么？",
       "passed": true,
       "precision_at_3": 0.0,
@@ -123,15 +178,28 @@
         "troubleshooting.md",
         "troubleshooting.md",
         "troubleshooting.md",
-        "product_faq.md",
+        "troubleshooting.md",
         "product_faq.md"
       ],
+      "returned_sources_top3": [
+        "troubleshooting.md",
+        "troubleshooting.md",
+        "troubleshooting.md"
+      ],
       "expected_sources": [],
-      "fail_reason": ""
+      "fail_reason": "",
+      "matched_sources": [],
+      "missing_sources": [],
+      "unexpected_sources": [
+        "troubleshooting.md"
+      ],
+      "mismatch_type": "none",
+      "analysis_note": "Correctly identified as no-answer"
     },
     {
       "test_id": "TC008",
       "scenario": "low_relevance_reject",
+      "language": "en",
       "query": "Can you recommend a good restaurant nearby?",
       "passed": true,
       "precision_at_3": 0.0,
@@ -147,12 +215,25 @@
         "product_faq.md",
         "product_faq.md"
       ],
+      "returned_sources_top3": [
+        "product_faq.md",
+        "product_faq.md",
+        "product_faq.md"
+      ],
       "expected_sources": [],
-      "fail_reason": ""
+      "fail_reason": "",
+      "matched_sources": [],
+      "missing_sources": [],
+      "unexpected_sources": [
+        "product_faq.md"
+      ],
+      "mismatch_type": "none",
+      "analysis_note": "Correctly identified as no-answer"
     },
     {
       "test_id": "TC010",
       "scenario": "evidence_citation",
+      "language": "en",
       "query": "What is the return window for purchases?",
       "passed": true,
       "precision_at_3": 1.0,
@@ -168,14 +249,27 @@
         "return_policy.md",
         "return_policy.md"
       ],
+      "returned_sources_top3": [
+        "return_policy.md",
+        "return_policy.md",
+        "return_policy.md"
+      ],
       "expected_sources": [
         "return_policy.md"
       ],
-      "fail_reason": ""
+      "fail_reason": "",
+      "matched_sources": [
+        "return_policy.md"
+      ],
+      "missing_sources": [],
+      "unexpected_sources": [],
+      "mismatch_type": "none",
+      "analysis_note": "All expected sources found in top-3"
     },
     {
       "test_id": "TC011",
       "scenario": "evidence_citation",
+      "language": "zh",
       "query": "产品保修包含哪些情况？",
       "passed": true,
       "precision_at_3": 1.0,
@@ -191,42 +285,68 @@
         "product_faq.md",
         "product_faq.md"
       ],
+      "returned_sources_top3": [
+        "product_faq.md",
+        "product_faq.md",
+        "product_faq.md"
+      ],
       "expected_sources": [
         "product_faq.md"
       ],
-      "fail_reason": ""
+      "fail_reason": "",
+      "matched_sources": [
+        "product_faq.md"
+      ],
+      "missing_sources": [],
+      "unexpected_sources": [],
+      "mismatch_type": "none",
+      "analysis_note": "All expected sources found in top-3"
     },
     {
       "test_id": "TC012",
       "scenario": "hallucination_risk",
+      "language": "en",
       "query": "What is the company's headquarters address?",
       "passed": true,
       "precision_at_3": 0.0,
       "recall_at_3": 1.0,
       "mrr": 0.0,
       "hit_rate": 0.0,
-      "top_score": 0.3101,
+      "top_score": 0.3116,
       "no_answer_detected": true,
       "returned_sources": [
         "product_faq.md",
         "product_faq.md",
         "product_faq.md",
-        "troubleshooting.md",
+        "product_faq.md",
         "troubleshooting.md"
       ],
+      "returned_sources_top3": [
+        "product_faq.md",
+        "product_faq.md",
+        "product_faq.md"
+      ],
       "expected_sources": [],
-      "fail_reason": ""
+      "fail_reason": "",
+      "matched_sources": [],
+      "missing_sources": [],
+      "unexpected_sources": [
+        "product_faq.md"
+      ],
+      "mismatch_type": "none",
+      "analysis_note": "Correctly identified as no-answer"
     },
     {
       "test_id": "TC014",
       "scenario": "normal_hit",
+      "language": "zh",
       "query": "设备无法开机怎么办？",
       "passed": true,
       "precision_at_3": 1.0,
       "recall_at_3": 1.0,
       "mrr": 1.0,
       "hit_rate": 1.0,
-      "top_score": 0.904,
+      "top_score": 0.9034,
       "no_answer_detected": false,
       "returned_sources": [
         "troubleshooting.md",
@@ -235,10 +355,22 @@
         "troubleshooting.md",
         "troubleshooting.md"
       ],
+      "returned_sources_top3": [
+        "troubleshooting.md",
+        "troubleshooting.md",
+        "troubleshooting.md"
+      ],
       "expected_sources": [
         "troubleshooting.md"
       ],
-      "fail_reason": ""
+      "fail_reason": "",
+      "matched_sources": [
+        "troubleshooting.md"
+      ],
+      "missing_sources": [],
+      "unexpected_sources": [],
+      "mismatch_type": "none",
+      "analysis_note": "All expected sources found in top-3"
     }
   ]
 }

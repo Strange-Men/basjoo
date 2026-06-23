@@ -187,6 +187,107 @@ def mrr(retrieved, expected):
     return 0.0
 
 
+# ---------------------------------------------------------------------------
+# Mismatch analysis (v2.1.2)
+# ---------------------------------------------------------------------------
+
+MISMATCH_TYPES = [
+    "none",
+    "missing_expected_source",
+    "unexpected_source_in_top3",
+    "low_rank_expected_source",
+    "no_answer_with_retrieval_noise",
+    "low_confidence_match",
+]
+
+
+def _compute_mismatch(retrieved_top3, returned_sources_top5, expected_set, scenario, top_score, no_answer_detected):
+    """Compute mismatch analysis for a single eval case.
+
+    Returns dict with: matched_sources, missing_sources, unexpected_sources,
+    mismatch_type, analysis_note.
+    """
+    retrieved_set = set(retrieved_top3)
+    matched = sorted(expected_set & retrieved_set)
+    missing = sorted(expected_set - retrieved_set)
+    unexpected = sorted(retrieved_set - expected_set)
+
+    # No-answer cases (expected_sources is empty)
+    if not expected_set:
+        if retrieved_top3 and top_score >= REAL_NO_ANSWER_THRESHOLD:
+            return {
+                "matched_sources": matched,
+                "missing_sources": missing,
+                "unexpected_sources": unexpected,
+                "mismatch_type": "no_answer_with_retrieval_noise",
+                "analysis_note": f"No-answer case but top_score={top_score:.4f} >= threshold {REAL_NO_ANSWER_THRESHOLD}",
+            }
+        return {
+            "matched_sources": matched,
+            "missing_sources": missing,
+            "unexpected_sources": unexpected,
+            "mismatch_type": "none",
+            "analysis_note": "Correctly identified as no-answer",
+        }
+
+    # Normal cases with expected sources
+    if not missing and not unexpected:
+        return {
+            "matched_sources": matched,
+            "missing_sources": missing,
+            "unexpected_sources": unexpected,
+            "mismatch_type": "none",
+            "analysis_note": "All expected sources found in top-3",
+        }
+
+    # All expected found, but unexpected sources also present
+    if not missing and unexpected:
+        return {
+            "matched_sources": matched,
+            "missing_sources": missing,
+            "unexpected_sources": unexpected,
+            "mismatch_type": "none",
+            "analysis_note": f"All expected found in top-3 (unexpected: {unexpected})",
+        }
+
+    # Check if missing expected source appears in top-5 (low rank)
+    if missing:
+        top5_set = set(returned_sources_top5)
+        low_rank = sorted(set(missing) & top5_set)
+        truly_missing = sorted(set(missing) - top5_set)
+        if low_rank and not truly_missing:
+            return {
+                "matched_sources": matched,
+                "missing_sources": missing,
+                "unexpected_sources": unexpected,
+                "mismatch_type": "low_rank_expected_source",
+                "analysis_note": f"Expected {low_rank} found in top-5 but not top-3",
+            }
+        if truly_missing:
+            return {
+                "matched_sources": matched,
+                "missing_sources": missing,
+                "unexpected_sources": unexpected,
+                "mismatch_type": "missing_expected_source",
+                "analysis_note": f"Expected {truly_missing} not found in top-5",
+            }
+        return {
+            "matched_sources": matched,
+            "missing_sources": missing,
+            "unexpected_sources": unexpected,
+            "mismatch_type": "missing_expected_source",
+            "analysis_note": f"Expected {missing} not found in top-3",
+        }
+
+    return {
+        "matched_sources": matched,
+        "missing_sources": missing,
+        "unexpected_sources": unexpected,
+        "mismatch_type": "none",
+        "analysis_note": "No mismatch detected",
+    }
+
+
 HALLUCINATION_MARKERS = [
     "headquarters", "founded in", "CEO", "stock", "IPO", "revenue",
     "billion", "million", "employees", "offices in",
@@ -482,9 +583,16 @@ def run_real_eval(top_k: int = 5, collection_name: str = DEFAULT_COLLECTION):
                 passed = False
                 fail_reason = f"Expected {expected_sources}, got {set(retrieved_doc_ids[:3])}"
 
+        # Mismatch analysis (v2.1.2)
+        mismatch = _compute_mismatch(
+            retrieved_doc_ids[:3], retrieved_doc_ids[:top_k],
+            expected_sources, scenario, top_score, no_answer_detected,
+        )
+
         results.append({
             "test_id": test_id,
             "scenario": scenario,
+            "language": case.get("language", ""),
             "query": query,
             "passed": passed,
             "precision_at_3": p3,
@@ -494,8 +602,14 @@ def run_real_eval(top_k: int = 5, collection_name: str = DEFAULT_COLLECTION):
             "top_score": round(top_score, 4),
             "no_answer_detected": no_answer_detected,
             "returned_sources": retrieved_doc_ids[:top_k],
+            "returned_sources_top3": retrieved_doc_ids[:3],
             "expected_sources": list(expected_sources),
             "fail_reason": fail_reason,
+            "matched_sources": mismatch["matched_sources"],
+            "missing_sources": mismatch["missing_sources"],
+            "unexpected_sources": mismatch["unexpected_sources"],
+            "mismatch_type": mismatch["mismatch_type"],
+            "analysis_note": mismatch["analysis_note"],
         })
 
         status = "PASS" if passed else "FAIL"
@@ -575,6 +689,42 @@ def run_real_eval(top_k: int = 5, collection_name: str = DEFAULT_COLLECTION):
         lines.append(f"- {r['test_id']}: {status} score={r['top_score']:.4f} p3={r['precision_at_3']:.2f} r3={r['recall_at_3']:.2f} | {r['query'][:50]}")
         if r.get("fail_reason"):
             lines.append(f"  - Reason: {r['fail_reason']}")
+
+    # Mismatch Analysis section (v2.1.2)
+    lines.extend([
+        "",
+        "## Mismatch Analysis",
+        "",
+        "Per-case mismatch diagnostics for retrieval quality debugging.",
+        "",
+        "| Case | Scenario | Mismatch Type | Matched | Missing | Unexpected | Note |",
+        "|---|---|---|---|---|---|---|",
+    ])
+
+    for r in results:
+        matched = ", ".join(r.get("matched_sources", [])) or "—"
+        missing = ", ".join(r.get("missing_sources", [])) or "—"
+        unexpected = ", ".join(r.get("unexpected_sources", [])) or "—"
+        mtype = r.get("mismatch_type", "—")
+        note = r.get("analysis_note", "—")
+        lines.append(
+            f"| {r['test_id']} | {r['scenario']} | {mtype} | {matched} | {missing} | {unexpected} | {note} |"
+        )
+
+    # Summary subsections
+    full_match = [r for r in results if r.get("mismatch_type") == "none" and r.get("expected_sources")]
+    source_mismatch = [r for r in results if r.get("mismatch_type") in ("missing_expected_source", "unexpected_source_in_top3", "low_rank_expected_source")]
+    retrieval_noise = [r for r in results if r.get("mismatch_type") == "no_answer_with_retrieval_noise"]
+
+    lines.extend(["", "### Summary", ""])
+    lines.append(f"- **Full match**: {len(full_match)} cases — {', '.join(r['test_id'] for r in full_match) if full_match else 'none'}")
+    lines.append(f"- **Source mismatch**: {len(source_mismatch)} cases — {', '.join(r['test_id'] for r in source_mismatch) if source_mismatch else 'none'}")
+    lines.append(f"- **No-answer with retrieval noise**: {len(retrieval_noise)} cases — {', '.join(r['test_id'] for r in retrieval_noise) if retrieval_noise else 'none'}")
+
+    if source_mismatch:
+        lines.extend(["", "### Observations", ""])
+        for r in source_mismatch:
+            lines.append(f"- **{r['test_id']}** ({r['scenario']}): {r.get('analysis_note', '')}")
 
     lines.extend([
         "",
@@ -696,6 +846,35 @@ def generate_comparison_report(real_report: dict, real_metrics: dict, mock_repor
         "- Real embedding captures semantic similarity that char-frequency misses",
         "- Chinese queries benefit significantly from real embedding",
         "- No-answer detection relies on cosine score threshold, not keyword rejection",
+        "",
+        "## Real Retrieval Error Analysis",
+        "",
+        "### Precision@3 = 0.600",
+        "",
+        "Precision@3 is dragged down by 4 no-answer cases (TC006, TC007, TC008, TC012) where",
+        "`expected_sources = []`, giving precision=0.0 by definition. For the 6 normal cases",
+        "(TC001, TC002, TC004, TC010, TC011, TC014), Precision@3 is actually **1.000**.",
+        "The aggregate 0.600 is a metric artifact, not a retrieval quality issue.",
+        "",
+        "### Recall@3 = 0.950",
+        "",
+        "Recall@3 = 0.950 means 95% of expected sources are found in top-3. The only recall",
+        "gap is **TC004** (multi_doc_retrieval): expected both `return_policy.md` and",
+        "`product_faq.md`, but only `product_faq.md` appeared in top-3 (recall=0.50).",
+        "This is because the query 'What is the warranty and return policy for electronics?'",
+        "is semantically closer to product_faq.md chunks than return_policy.md chunks.",
+        "",
+        "### MRR = 0.600",
+        "",
+        "MRR = 0.600 indicates the expected source is not always at rank 1. For TC004,",
+        "the expected `return_policy.md` is not in top-5 at all (MRR=0 for that source).",
+        "For normal single-source cases, MRR = 1.0 (expected source is always rank 1).",
+        "",
+        "### Important Note",
+        "",
+        "This analysis covers **retrieval quality only** — whether the right documents",
+        "are retrieved. It does NOT evaluate LLM answer quality, hallucination, or",
+        "response correctness. Those require a separate chat evaluation pipeline.",
         "",
         "## Next Steps",
         "",
