@@ -260,50 +260,97 @@ The Markdown report includes:
 3. **Eval cases are manually curated** — not auto-generated
 4. **No multi-turn conversation evaluation** — single-turn only
 5. **No latency/performance metrics** — quality-focused
-6. **`--write-db` not implemented** — mock mode only
+6. **Real mode evaluates retrieval only** — no LLM chat eval
 
-## Future Real-Qdrant Extension
-
-To evaluate real RAG quality (requires API keys + Qdrant):
+## Real Qdrant Retrieval Evaluation (v2.0)
 
 ### Prerequisites
 
 1. Start Qdrant: `docker compose up -d qdrant`
-2. Set environment variables:
-   - `JINA_API_KEY` — for embeddings
+2. Set environment variables in `basjoo/.env`:
+   - `SILICONFLOW_API_KEY` — for embeddings
    - `QDRANT_URL` — Qdrant endpoint (default: `http://localhost:6333`)
+   - `SILICONFLOW_BASE_URL` — API base (default: `https://api.siliconflow.cn/v1`)
+   - `SILICONFLOW_EMBEDDING_MODEL` — model name (default: `Qwen/Qwen3-Embedding-0.6B`)
 
-### Implementation Steps
+### Step 1: Seed Knowledge Base to Qdrant
 
-1. **Ingest demo knowledge base**:
-   ```bash
-   python scripts\seed_demo_data.py --write-db
-   ```
+```powershell
+cd backend
 
-2. **Replace mock components**:
-   - `MockRetriever` → `KbRetrievalService` (uses Qdrant)
-   - Mock embedding → Jina API embedding
-   - Mock pipeline → Real chat endpoint
+# Write demo knowledge base to Qdrant (creates collection customerops_demo_real_eval)
+.\venv\Scripts\python.exe scripts\seed_demo_data.py --write-db
 
-3. **Run evaluation**:
-   ```bash
-   python scripts\run_rag_eval.py
-   ```
+# Or with alias
+.\venv\Scripts\python.exe scripts\seed_demo_data.py --write-qdrant
+
+# Reset collection (delete + recreate)
+.\venv\Scripts\python.exe scripts\seed_demo_data.py --write-db --reset
+```
+
+### Step 2: Run Real Retrieval Evaluation
+
+```powershell
+cd backend
+
+# Real mode: 5 eval cases against Qdrant + SiliconFlow
+.\venv\Scripts\python.exe scripts\run_rag_eval.py --real
+
+# Custom collection name
+.\venv\Scripts\python.exe scripts\run_rag_eval.py --real --collection-name my_collection
+
+# Custom top-k
+.\venv\Scripts\python.exe scripts\run_rag_eval.py --real --top-k 3
+```
+
+### Step 3: Review Reports
+
+```powershell
+# Real eval report
+dir reports\rag_eval_real_report.json
+dir reports\rag_eval_real_report.md
+
+# Mock vs Real comparison
+dir reports\rag_eval_mock_vs_real.md
+```
+
+### Real Eval Cases (5 selected)
+
+| ID | Language | Scenario | Expected Sources |
+|---|---|---|---|
+| TC001 | EN | normal_hit | return_policy.md |
+| TC002 | ZH | normal_hit | product_faq.md |
+| TC006 | EN | no_answer_fallback | (none) |
+| TC010 | EN | evidence_citation | return_policy.md |
+| TC014 | ZH | normal_hit | troubleshooting.md |
+
+### Real Mode Metrics
+
+| Metric | Description |
+|---|---|
+| Precision@3 | Fraction of top-3 results that match expected docs |
+| Recall@3 | Fraction of expected docs found in top-3 |
+| MRR | Mean Reciprocal Rank of first relevant result |
+| Hit Rate | Whether any expected doc appears in top-k |
+| No-Answer Accuracy | Correct rejection rate for irrelevant queries |
 
 ### What Stays the Same
 
-- Test structure (15 eval cases)
+- Test structure (15 eval cases for mock, 5 for real)
 - Metrics computation (precision, recall, MRR, etc.)
 - Report generation (JSON + Markdown)
 - Demo data format
+- All mock mode functionality
 
-### What Changes
+### What Changed in v2.0
 
-- Embedding backend (character-frequency → Jina API)
-- Retrieval backend (in-memory → Qdrant)
-- Answer generation (extractive → LLM-generated)
+- `seed_demo_data.py --write-db` now writes to Qdrant (was a stub)
+- `run_rag_eval.py --real` runs real retrieval eval (new)
+- Uses SiliconFlow Qwen3-Embedding-0.6B (1024 dim)
+- Uses Qdrant REST API (urllib, avoids qdrant_client version issues)
+- Generates mock vs real comparison report
 
 ---
 
-*Version: v1.2-docs-and-report*
-*Last updated: 2026-06-20*
+*Version: v2.0-real-qdrant-eval-adapter*
+*Last updated: 2026-06-23*

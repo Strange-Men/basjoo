@@ -7,7 +7,7 @@
 This document describes the enhancements made to the Basjoo AI customer support platform through secondary development. The work focuses on **RAG quality evaluation**, **demo data provisioning**, and **engineering verifiability** — all achievable without real API keys or external services.
 
 **Branch**: `phase1-rag-eval-harness`
-**Current Version**: v1.2-docs-and-report
+**Current Version**: v2.0-real-qdrant-eval-adapter
 
 ## What Was Added
 
@@ -42,6 +42,19 @@ Polished documentation and formal evaluation reports.
 - Enhanced evaluation report with executive summary
 - Portfolio summary for interview preparation
 - This enhancement summary
+
+### 4. Real Qdrant Retrieval Evaluation (v2.0)
+
+Extended the mock harness to support real retrieval evaluation against Qdrant + SiliconFlow.
+
+**Key features**:
+- `seed_demo_data.py --write-db` writes demo knowledge base to Qdrant with real embeddings
+- `run_rag_eval.py --real` runs 5 eval cases against real Qdrant + SiliconFlow embedding
+- SiliconFlow Qwen3-Embedding-0.6B (1024 dim) for embedding
+- Qdrant REST API for vector search
+- Mock vs Real comparison report generation
+- 7 new config tests (no API dependency)
+- Real mode evaluates retrieval only (no LLM chat eval)
 
 ## File Map
 
@@ -217,25 +230,22 @@ The evaluation harness is designed to:
 3. **Eval cases are manually curated** — not auto-generated
 4. **No multi-turn conversation evaluation** — single-turn only
 5. **No latency/performance metrics** — quality-focused
-6. **`--write-db` not implemented** — mock mode only
+6. **Real mode evaluates retrieval only** — no LLM chat eval, no hallucination check
 
 ## Next Steps
 
-### v1.3 — Phase 1 Complete
+### v2.1 — Extended Real Eval (Future)
 
-- Final documentation review
-- Tag v1.3-phase1-complete
-- Prepare for Phase 2
+- Run full 15 cases with real retrieval
+- Add LLM answer generation evaluation
+- Test with larger embedding models
+- Add latency benchmarks
 
-### Phase 2 — Real RAG Integration (Future)
+### v3.0 — Full RAG Pipeline Eval (Future)
 
-1. Start Qdrant: `docker compose up -d qdrant`
-2. Set environment variables: `JINA_API_KEY`, `QDRANT_URL`
-3. Ingest demo knowledge base into Qdrant
-4. Replace `MockRetriever` with real `KbRetrievalService`
-5. Replace mock pipeline with real chat endpoint
-
-The test structure remains the same — only the retrieval and generation backends change.
+- Integrate real LLM chat endpoint
+- Evaluate hallucination with real answers
+- Multi-turn conversation evaluation
 
 ---
 

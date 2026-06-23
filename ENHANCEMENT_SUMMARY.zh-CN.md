@@ -2,7 +2,7 @@
 
 > **面向**：中国 HR / 技术面试官 / 作品集访问者
 > **分支**：`phase1-rag-eval-harness`
-> **当前版本**：v1.3-phase1-complete
+> **当前版本**：v2.0-real-qdrant-eval-adapter
 
 ---
 
@@ -69,6 +69,20 @@
 | **portfolio-summary.md** | 作品集/面试指南，含技术亮点、面试话术、简历 bullet |
 | **rag_eval_report.md** | 正式评估报告，含执行摘要、指标表格、场景覆盖 |
 | **reports/README.md** | 报告文档，说明如何生成和解读 |
+
+### 3.4 真实 Qdrant 检索评估（v2.0）
+
+将 mock 评估框架扩展为支持真实 Qdrant + SiliconFlow 检索评估。
+
+| 组件 | 说明 |
+|---|---|
+| **seed_demo_data.py --write-db** | 将 demo 知识库写入 Qdrant，使用真实 embedding |
+| **run_rag_eval.py --real** | 对 5 个 eval cases 运行真实检索评估 |
+| **SiliconFlow Qwen3-Embedding-0.6B** | 1024 维 embedding 模型 |
+| **Qdrant REST API** | 向量检索（urllib，避免 qdrant_client 版本问题） |
+| **rag_eval_real_report.json/md** | 真实评估报告 |
+| **rag_eval_mock_vs_real.md** | Mock vs Real 对比报告 |
+| **test_real_eval_config.py** | 7 个配置测试（不依赖真实 API） |
 
 ---
 
@@ -241,21 +255,24 @@ tests/rag_eval/: 37 passed
 3. **评估用例是手动设计的** — 不是自动生成的
 4. **没有多轮对话评估** — 只评估单轮
 5. **没有延迟/性能指标** — 只关注质量
-6. **`--write-db` 未实现** — 只有 mock 模式
+6. **真实模式只评估检索** — 不评估 LLM 回答生成和幻觉检测
 
 ---
 
 ## 9. 下一步计划
 
-### Phase 2 — 真实 RAG 集成（未来）
+### v2.1 — 扩展真实评估（未来）
 
-1. 启动 Qdrant：`docker compose up -d qdrant`
-2. 设置环境变量：`JINA_API_KEY`、`QDRANT_URL`
-3. 将 demo 知识库导入 Qdrant
-4. 将 `MockRetriever` 替换为真实的 `KbRetrievalService`
-5. 将 mock pipeline 替换为真实 chat endpoint
+- 对全部 15 个 cases 运行真实检索评估
+- 添加 LLM 回答生成评估
+- 测试更大的 embedding 模型
+- 添加延迟基准测试
 
-测试结构保持不变 — 只需替换检索和生成后端。
+### v3.0 — 完整 RAG 管道评估（未来）
+
+- 集成真实 LLM chat endpoint
+- 评估真实回答的幻觉问题
+- 多轮对话评估
 
 ---
 

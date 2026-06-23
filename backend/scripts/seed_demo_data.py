@@ -3,18 +3,23 @@
 Demo Data Seeder for SmartHome Support Demo.
 
 Validates, previews, and exports demo data for the RAG evaluation harness.
-Supports three modes:
-  --validate-only : Validate JSON schema only (no output files)
-  --dry-run       : Print what would be created (no DB write, no file write)
-  --mock          : Generate/refresh mock fixtures for tests/rag_eval/
+Supports modes:
+  --validate-only  : Validate JSON schema only (no output files)
+  --dry-run        : Print what would be created (no DB write, no file write)
+  --mock           : Generate/refresh mock fixtures for tests/rag_eval/
+  --write-db       : Write demo knowledge base to Qdrant (real mode, v2.0)
+  --write-qdrant   : Alias for --write-db
 
 Default: validate-only (safe, no side effects).
-Writing to a real database requires --write-db (NOT implemented in v1.1).
 
 Usage:
     python scripts/seed_demo_data.py --validate-only
     python scripts/seed_demo_data.py --dry-run
     python scripts/seed_demo_data.py --mock
+    python scripts/seed_demo_data.py --write-db
+    python scripts/seed_demo_data.py --write-qdrant
+    python scripts/seed_demo_data.py --write-db --reset
+    python scripts/seed_demo_data.py --write-db --collection-name my_collection
 """
 
 import argparse
@@ -395,29 +400,240 @@ def _chunk_markdown(content: str, doc_id: str) -> list[dict]:
 
 
 # ---------------------------------------------------------------------------
-# Database write (NOT implemented in v1.1)
+# Database write — real Qdrant mode (v2.0)
 # ---------------------------------------------------------------------------
 
-def write_to_db(data: dict):
-    """Write demo data to the database.
+DEFAULT_COLLECTION = "customerops_demo_real_eval"
+EMBEDDING_DIM = 1024
 
-    NOT IMPLEMENTED in v1.1. Requires:
-    - Valid database connection
-    - Proper ORM models
-    - Environment validation
-    """
-    # Check for production environment
-    env = os.environ.get("ENVIRONMENT", "").lower()
-    if env in ("production", "prod"):
-        print("ERROR: Cannot write demo data to a production database.")
-        print("Set ENVIRONMENT=development or ENVIRONMENT=staging to proceed.")
+
+def _load_env_or_exit() -> dict:
+    """Load required env vars for real Qdrant write. Returns config dict."""
+    from dotenv import load_dotenv
+    # .env lives in repo root (basjoo/), not backend/
+    repo_root = BACKEND_DIR.parent
+    env_path = repo_root / ".env"
+    if env_path.exists():
+        load_dotenv(env_path)
+
+    qdrant_url = os.environ.get("QDRANT_URL", "http://localhost:6333")
+    api_key = os.environ.get("SILICONFLOW_API_KEY", "")
+    base_url = os.environ.get("SILICONFLOW_BASE_URL", "https://api.siliconflow.cn/v1")
+    model = os.environ.get("SILICONFLOW_EMBEDDING_MODEL", "Qwen/Qwen3-Embedding-0.6B")
+
+    if not api_key:
+        print("ERROR: SILICONFLOW_API_KEY not set in environment or .env file.")
+        print("Set it in backend/.env or as an environment variable.")
         sys.exit(1)
 
-    print("ERROR: --write-db is not implemented in v1.1.")
-    print("Demo data is designed for mock/dry-run mode only.")
-    print("To write to a real database, implement this function with")
-    print("proper ORM integration and environment validation.")
-    sys.exit(1)
+    return {
+        "qdrant_url": qdrant_url,
+        "api_key": api_key,
+        "base_url": base_url.rstrip("/") + "/embeddings",
+        "model": model,
+    }
+
+
+def _embed_texts_sync(texts: list[str], cfg: dict) -> list[list[float]]:
+    """Call SiliconFlow embedding API (sync) with retry. Returns list of vectors."""
+    import httpx
+    import time
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {cfg['api_key']}",
+    }
+    payload = {"model": cfg["model"], "input": texts}
+
+    max_retries = 3
+    last_err = None
+    for attempt in range(max_retries):
+        try:
+            with httpx.Client(timeout=60.0, verify=False) as client:
+                resp = client.post(cfg["base_url"], json=payload, headers=headers)
+                resp.raise_for_status()
+                data = resp.json()
+                return [item["embedding"] for item in data.get("data", [])]
+        except Exception as e:
+            last_err = e
+            if attempt < max_retries - 1:
+                wait = 2 ** attempt
+                print(f"  Retry {attempt + 1}/{max_retries} after {wait}s: {e}")
+                time.sleep(wait)
+    raise last_err
+
+
+def write_to_db(data: dict, collection_name: str = DEFAULT_COLLECTION, reset: bool = False):
+    """Write demo knowledge base to Qdrant with real SiliconFlow embeddings.
+
+    Steps:
+    1. Load demo knowledge base (from fixtures)
+    2. Generate embeddings via SiliconFlow API
+    3. Create/recreate Qdrant collection
+    4. Upsert all chunks as points
+    """
+    import uuid
+    import urllib.request
+    import urllib.error
+
+    cfg = _load_env_or_exit()
+    qdrant_url = cfg["qdrant_url"].rstrip("/")
+
+    # Load knowledge base from fixtures
+    kb_path = FIXTURES_DIR / "demo_knowledge_base.json"
+    if not kb_path.exists():
+        print(f"ERROR: Knowledge base fixture not found: {kb_path}")
+        print("Run --mock first to generate fixtures.")
+        sys.exit(1)
+
+    with open(kb_path, encoding="utf-8") as f:
+        kb = json.load(f)
+
+    docs = kb.get("documents", [])
+    if not docs:
+        print("ERROR: No documents in knowledge base.")
+        sys.exit(1)
+
+    # Collect all chunks with metadata
+    all_chunks = []
+    for doc in docs:
+        for chunk in doc.get("chunks", []):
+            all_chunks.append({
+                "doc_id": doc["doc_id"],
+                "chunk_id": chunk.get("chunk_id", f"{doc['doc_id']}_{chunk['chunk_index']}"),
+                "source_title": doc["source_title"],
+                "source_type": doc.get("source_type", "file"),
+                "content": chunk["text"],
+            })
+
+    print("=" * 60)
+    print("  Seed Demo Data — Real Qdrant Write (v2.0)")
+    print("=" * 60)
+    print(f"  Documents:       {len(docs)}")
+    print(f"  Chunks:          {len(all_chunks)}")
+    print(f"  Collection:      {collection_name}")
+    print(f"  Embedding model: {cfg['model']}")
+    print(f"  Embedding dim:   {EMBEDDING_DIM}")
+    print(f"  Qdrant URL:      {qdrant_url}")
+    print(f"  Reset:           {reset}")
+    print()
+
+    # Generate embeddings in batch
+    print("  Generating embeddings via SiliconFlow API...")
+    texts = [c["content"] for c in all_chunks]
+    try:
+        vectors = _embed_texts_sync(texts, cfg)
+    except Exception as e:
+        print(f"ERROR: Embedding API call failed: {e}")
+        sys.exit(1)
+
+    if len(vectors) != len(texts):
+        print(f"ERROR: Expected {len(texts)} embeddings, got {len(vectors)}")
+        sys.exit(1)
+
+    actual_dim = len(vectors[0]) if vectors else 0
+    print(f"  Embeddings generated: {len(vectors)} (dim={actual_dim})")
+
+    if actual_dim != EMBEDDING_DIM:
+        print(f"  WARNING: Expected dim={EMBEDDING_DIM}, got dim={actual_dim}. Using actual dim.")
+
+    # Connect to Qdrant via HTTP (urllib, avoids httpx/qdrant_client issues)
+    print("\n  Connecting to Qdrant...")
+    try:
+        with urllib.request.urlopen(f"{qdrant_url}/collections", timeout=30) as resp:
+            data = json.loads(resp.read())
+            existing_names = [c["name"] for c in data.get("result", {}).get("collections", [])]
+            print(f"  Connected. Existing collections: {len(existing_names)}")
+    except Exception as e:
+        print(f"ERROR: Cannot connect to Qdrant at {qdrant_url}: {e}")
+        sys.exit(1)
+
+    def _qdrant_request(method: str, path: str, body: dict | None = None):
+        """Helper for Qdrant REST API calls via urllib."""
+        url = f"{qdrant_url}{path}"
+        data = json.dumps(body).encode() if body else None
+        req = urllib.request.Request(url, data=data, method=method)
+        req.add_header("Content-Type", "application/json")
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                return resp.status, json.loads(resp.read())
+        except urllib.error.HTTPError as e:
+            return e.code, e.read().decode()
+
+    # Create or recreate collection
+    # Delete if reset requested
+    if reset and collection_name in existing_names:
+        status, _ = _qdrant_request("DELETE", f"/collections/{collection_name}")
+        if status in (200, 404):
+            print(f"  Deleted existing collection: {collection_name}")
+            existing_names.remove(collection_name)
+        else:
+            print(f"  WARNING: Failed to delete collection: {status}")
+
+    # Create collection if it doesn't exist
+    if collection_name not in existing_names:
+        create_payload = {
+            "vectors": {
+                "size": actual_dim,
+                "distance": "Cosine",
+            },
+        }
+        status, resp_data = _qdrant_request("PUT", f"/collections/{collection_name}", create_payload)
+        if status in (200, 201):
+            print(f"  Created collection: {collection_name} (dim={actual_dim}, COSINE)")
+        else:
+            print(f"ERROR: Failed to create collection: {status} {resp_data}")
+            sys.exit(1)
+    else:
+        print(f"  Collection '{collection_name}' already exists, will upsert.")
+
+    # Upsert points
+    print("\n  Upserting points...")
+    points = []
+    for i, chunk in enumerate(all_chunks):
+        points.append({
+            "id": str(uuid.uuid4()),
+            "vector": vectors[i],
+            "payload": {
+                "doc_id": chunk["doc_id"],
+                "chunk_id": chunk["chunk_id"],
+                "source_title": chunk["source_title"],
+                "source_type": chunk["source_type"],
+                "content": chunk["content"],
+            },
+        })
+
+    # Batch upsert (max 100 per call)
+    total_upserted = 0
+    batch_size = 100
+    for i in range(0, len(points), batch_size):
+        batch = points[i:i + batch_size]
+        upsert_payload = {"points": batch}
+        status, resp_data = _qdrant_request(
+            "PUT",
+            f"/collections/{collection_name}/points?wait=true",
+            upsert_payload,
+        )
+        if status not in (200, 201):
+            print(f"ERROR: Upsert failed: {status} {resp_data}")
+            sys.exit(1)
+        total_upserted += len(batch)
+
+    print(f"  Upserted {total_upserted} points.")
+
+    # Verify
+    status, resp_data = _qdrant_request("GET", f"/collections/{collection_name}")
+    if status == 200:
+        info = resp_data.get("result", {})
+        points_count = info.get("points_count", "unknown")
+        print(f"\n  Verification:")
+        print(f"    Collection:   {collection_name}")
+        print(f"    Points count: {points_count}")
+        print(f"    Vector dim:   {actual_dim}")
+
+    print("\n" + "=" * 60)
+    print("  SUCCESS: Demo data written to Qdrant.")
+    print("=" * 60)
 
 
 # ---------------------------------------------------------------------------
@@ -435,8 +651,14 @@ def main():
                        help="Print summary of what would be seeded")
     group.add_argument("--mock", action="store_true",
                        help="Generate mock fixtures for tests/rag_eval/")
-    parser.add_argument("--write-db", action="store_true",
-                        help="Write to database (NOT implemented in v1.1)")
+    group.add_argument("--write-db", action="store_true",
+                       help="Write demo knowledge base to Qdrant (real mode, v2.0)")
+    group.add_argument("--write-qdrant", action="store_true",
+                       help="Alias for --write-db")
+    parser.add_argument("--reset", action="store_true",
+                        help="Delete and recreate Qdrant collection before writing")
+    parser.add_argument("--collection-name", default=DEFAULT_COLLECTION,
+                        help=f"Qdrant collection name (default: {DEFAULT_COLLECTION})")
     args = parser.parse_args()
 
     # Validate first (always)
@@ -452,8 +674,8 @@ def main():
     print(f"Validation PASSED — all {len(data)} files valid.\n")
 
     # Dispatch
-    if args.write_db:
-        write_to_db(data)
+    if args.write_db or args.write_qdrant:
+        write_to_db(data, collection_name=args.collection_name, reset=args.reset)
     elif args.mock:
         generate_mock_fixtures(data)
     elif args.dry_run:

@@ -1,0 +1,134 @@
+{
+  "metadata": {
+    "timestamp": "2026-06-23T09:17:21.196002+00:00",
+    "test_mode": "real",
+    "collection": "customerops_demo_real_eval",
+    "embedding_model": "Qwen/Qwen3-Embedding-0.6B",
+    "embedding_dim": 1024,
+    "total_cases": 5,
+    "passed_cases": 5,
+    "failed_cases": 0
+  },
+  "metrics": {
+    "precision_at_3": 0.7333333333333333,
+    "recall_at_3": 1.0,
+    "mrr": 0.8,
+    "hit_rate": 0.8,
+    "no_answer_accuracy": 1.0
+  },
+  "test_results": [
+    {
+      "test_id": "TC001",
+      "scenario": "normal_hit",
+      "query": "How do I return a product?",
+      "passed": true,
+      "precision_at_3": 1.0,
+      "recall_at_3": 1.0,
+      "mrr": 1.0,
+      "hit_rate": 1.0,
+      "top_score": 0.6862,
+      "no_answer_detected": false,
+      "returned_sources": [
+        "return_policy.md",
+        "return_policy.md",
+        "return_policy.md",
+        "troubleshooting.md",
+        "product_faq.md"
+      ],
+      "expected_sources": [
+        "return_policy.md"
+      ],
+      "fail_reason": ""
+    },
+    {
+      "test_id": "TC002",
+      "scenario": "normal_hit",
+      "query": "产品保修多久？",
+      "passed": true,
+      "precision_at_3": 0.6666666666666666,
+      "recall_at_3": 1.0,
+      "mrr": 1.0,
+      "hit_rate": 1.0,
+      "top_score": 0.665,
+      "no_answer_detected": false,
+      "returned_sources": [
+        "product_faq.md",
+        "product_faq.md",
+        "return_policy.md",
+        "return_policy.md",
+        "product_faq.md"
+      ],
+      "expected_sources": [
+        "product_faq.md"
+      ],
+      "fail_reason": ""
+    },
+    {
+      "test_id": "TC006",
+      "scenario": "no_answer_fallback",
+      "query": "What is the weather like today?",
+      "passed": true,
+      "precision_at_3": 0.0,
+      "recall_at_3": 1.0,
+      "mrr": 0.0,
+      "hit_rate": 0.0,
+      "top_score": 0.2764,
+      "no_answer_detected": true,
+      "returned_sources": [
+        "product_faq.md",
+        "product_faq.md",
+        "return_policy.md",
+        "troubleshooting.md",
+        "return_policy.md"
+      ],
+      "expected_sources": [],
+      "fail_reason": ""
+    },
+    {
+      "test_id": "TC010",
+      "scenario": "evidence_citation",
+      "query": "What is the return window for purchases?",
+      "passed": true,
+      "precision_at_3": 1.0,
+      "recall_at_3": 1.0,
+      "mrr": 1.0,
+      "hit_rate": 1.0,
+      "top_score": 0.6325,
+      "no_answer_detected": false,
+      "returned_sources": [
+        "return_policy.md",
+        "return_policy.md",
+        "return_policy.md",
+        "product_faq.md",
+        "product_faq.md"
+      ],
+      "expected_sources": [
+        "return_policy.md"
+      ],
+      "fail_reason": ""
+    },
+    {
+      "test_id": "TC014",
+      "scenario": "normal_hit",
+      "query": "设备无法开机怎么办？",
+      "passed": true,
+      "precision_at_3": 1.0,
+      "recall_at_3": 1.0,
+      "mrr": 1.0,
+      "hit_rate": 1.0,
+      "top_score": 0.9033,
+      "no_answer_detected": false,
+      "returned_sources": [
+        "troubleshooting.md",
+        "troubleshooting.md",
+        "troubleshooting.md",
+        "troubleshooting.md",
+        "product_faq.md"
+      ],
+      "expected_sources": [
+        "troubleshooting.md"
+      ],
+      "fail_reason": ""
+    }
+  ]
+}
